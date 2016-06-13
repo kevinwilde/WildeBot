@@ -4,7 +4,7 @@ import requests
 
 app = Flask(__name__)
 
-PAT = ''
+PAT = '***REMOVED***'
 
 @app.route('/', methods=['GET'])
 def handle_verification():
