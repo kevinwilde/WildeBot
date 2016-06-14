@@ -28,7 +28,12 @@ class Bayes_Classifier:
         # Couldn't load saved data files, so need to train
         except (OSError, IOError) as e:
             print e
+            print "Need to train"
             self.train(self.get_file_list())
+
+        except Exception as e:
+            print "Unexpected exception"
+            print e
 
         print "Num neg, pos files", self.neg_data.num_files, self.pos_data.num_files
 
@@ -117,13 +122,11 @@ class Bayes_Classifier:
         self.save(pos, self.pos_data_filename)
 
 
-    def classify(self, sText, never_neutral=False):
-        """Given a target string sText, this function returns the most likely
-        document class to which the target string belongs (i.e., positive,
-        negative or neutral). If never_neutral is set to True, it will never
-        output neutral."""
-        
-        lWordList = self.tokenize(sText)
+    def classify(self, lWordList, never_neutral=False):
+        """Given a target list of tokens lWordList, this function returns the
+        most likely document class to which the target string belongs (i.e.
+        positive, negative, or neutral). If never_neutral is set to True, it
+        will never output neutral."""
 
         min_feature_frequency = 7
 

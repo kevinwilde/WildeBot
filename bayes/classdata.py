@@ -1,10 +1,3 @@
-# Name: Kevin Wilde (kjw731)
-# Date: May 23, 2016
-# Description: Sentiment Analysis with Naive Bayes Classifiers
-#
-# All group members were present and contributing during all work on this
-# project. (I worked alone.)
-#
 # Class to hold class data. Necessary to define in separate module because
 # I will be pickling instances of this class
 

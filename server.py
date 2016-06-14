@@ -30,9 +30,9 @@ def handle_messages():
         tokens = b.tokenize(message)
         print "Tokens", tokens
         if len(tokens) > 0 and tokens[0].lower() == "classify":
-            res = b.classify(message)
+            res = b.classify(tokens[1:])
             send_message(PAT, sender, res)
-        elif len(tokens) > 0 and tokens[0].lower() == "reverse:":
+        elif len(tokens) > 0 and tokens[0].lower() == "reverse":
             reverse_message = message[::-1]
             send_message(PAT, sender, reverse_message)
         else:
