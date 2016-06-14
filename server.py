@@ -23,7 +23,8 @@ def handle_messages():
   print payload
   for sender, message in messaging_events(payload):
     print "Incoming from %s: %s" % (sender, message)
-    send_message(PAT, sender, message)
+    reverse_message = message[::-1]
+    send_message(PAT, sender, reverse_message)
   return "ok"
 
 def messaging_events(payload):
