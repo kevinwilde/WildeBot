@@ -2,18 +2,19 @@ from flask import Flask, request
 import json
 import requests
 
-import bayesbest
-import classdata
+from globalvars import *
+# import bayesbest
+# import classdata
+import TicTacToe
+
 
 app = Flask(__name__)
 
-PAT = '***REMOVED***'
-b = bayesbest.Bayes_Classifier()
 
 @app.route('/', methods=['GET'])
 def handle_verification():
     print "Handling Verification: ->"
-    if request.args.get('hub.verify_token', '') == 'my_voice_is_my_password_verify_me':
+    if request.args.get('hub.verify_token', '') == password:
         print "Verification successful!"
         return request.args.get('hub.challenge', '')
     else:
@@ -30,14 +31,48 @@ def handle_messages():
         # send_message(PAT, sender, message)
         tokens = b.tokenize(message)
         print "Tokens", tokens
+
+        # Classify
         if len(tokens) > 0 and tokens[0].lower() == "classify":
             res = b.classify(tokens[1:])
             send_message(PAT, sender, res)
+
+        # Reverse
         elif len(tokens) > 0 and tokens[0].lower() == "reverse":
             reverse_message = message[::-1]
             send_message(PAT, sender, reverse_message)
+
+        # Tic Tac Toe
+        elif (len(tokens) > 1 
+            and tokens[0].lower() =="ttt"
+            and tokens[1].lower() == "new"):
+            t = TTTBoard()
+            player1 = Player(1, Player.HUMAN)
+            player2 = Player(2, Player.ABPRUNE)
+            # t.hostGame(player1, player2)
+            send_message(PAT, sender, str(t) + "\nYou go first")
+            t.saveGame(sender + ttt_extension)
+        elif (len(tokens) > 1 and tokens[0].lower() =="ttt"):
+            try:
+                t = TTTBoard()
+                t = t.loadGame(sender + ttt_extension)
+                move = int(tokens[1])
+                if t.legalMove(1, move):
+                    t.makeMove(1, move)
+                    send_message(PAT, sender, str(t))
+                    ab_move = player2.chooseMove(t)
+                    t.makeMove(2, ab_move)
+                    send_message(PAT, sender, str(t))
+                    t.saveGame(sender + ttt_extension)
+
+            except e:
+                err_msg = "Something went wrong...\n" + str(e)
+                send_message(PAT, sender, err_msg)
+
+        # Echo
         else:
             send_message(PAT, sender, message)
+
     return "ok"
 
 def messaging_events(payload):
