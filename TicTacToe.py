@@ -22,7 +22,7 @@ class TTTBoard:
         ret += "\n"
         return ret
 
-    def legalMove( self, playernum, move ):
+    def legalMove( self, playerNum, move ):
         """Returns true or false, whether the move is legal for the
         player."""
         return move in self.legalMoves(playerNum)
