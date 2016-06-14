@@ -48,8 +48,8 @@ def handle_messages():
             and tokens[0].lower() =="ttt"
             and tokens[1].lower() == "new"):
             t = TTTBoard()
-            player1 = Player(1, Player.HUMAN)
-            player2 = Player(2, Player.ABPRUNE)
+            # player1 = Player(1, Player.HUMAN)
+            # player2 = Player(2, Player.ABPRUNE)
             # t.hostGame(player1, player2)
             send_message(PAT, sender, str(t) + "\nYou go first")
             t.saveGame(sender + ttt_extension)
@@ -61,9 +61,13 @@ def handle_messages():
                 if t.legalMove(1, move):
                     t.makeMove(1, move)
                     send_message(PAT, sender, str(t))
+
+                    # Bot responds
+                    player2 = Player(2, Player.ABPRUNE)
                     ab_move = player2.chooseMove(t)
                     t.makeMove(2, ab_move)
                     send_message(PAT, sender, str(t))
+                    
                     t.saveGame(sender + ttt_extension)
 
             except Exception as e:

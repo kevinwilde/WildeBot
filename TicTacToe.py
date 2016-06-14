@@ -6,6 +6,7 @@ class TTTBoard:
         """ Initializes the data members."""
         self.SIZE = 3
         self.board = [' ']*(self.SIZE*self.SIZE)
+        self.players = [None, None]
     
     def __str__(self):
         """ Returns a string representation of the board where
@@ -21,12 +22,12 @@ class TTTBoard:
         ret += "\n"
         return ret
 
-    def legalMove( self, player, move ):
+    def legalMove( self, playernum, move ):
         """Returns true or false, whether the move is legal for the
         player."""
-        return move in self.legalMoves(player)
+        return move in self.legalMoves(playerNum)
 
-    def legalMoves( self, player ):
+    def legalMoves( self, playerNum ):
         """ Returns the legal moves reminaing for the player in question"""
         moves = []
         for m in range( len(self.board)):
@@ -34,12 +35,12 @@ class TTTBoard:
                 moves += [m]
         return moves
 
-    def makeMove( self, player, pos ):
+    def makeMove( self, playerNum, pos ):
         """ Make a move for player in pos.  Assumes pos is a legal move. """
         move = pos
         if move not in range(len(self.board)) or self.board[move] != ' ':
             return False
-        if player.num == 1:
+        if playerNum == 1:
             self.board[move] = 'X'
         else:
             self.board[move] = 'O'
@@ -101,6 +102,7 @@ class TTTBoard:
 
     def hostGame( self, player1, player2 ):
         """ Host a game of tic tac toe between two players"""
+        self.players = [player1, player2]
         turn = player1      # Keep track of whose turn it is
         wait = player2
         winner = 0
