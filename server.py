@@ -2,7 +2,7 @@ from flask import Flask, request
 import json
 import requests
 
-import bayes
+import bayes.bayesbest
 
 app = Flask(__name__)
 
