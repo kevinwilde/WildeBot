@@ -7,6 +7,7 @@ import bayes.bayesbest
 app = Flask(__name__)
 
 PAT = '***REMOVED***'
+b = bayes.bayesbest.Bayes_Classifier()
 
 @app.route('/', methods=['GET'])
 def handle_verification():
@@ -23,7 +24,6 @@ def handle_messages():
     print "Handling Messages"
     payload = request.get_data()
     print payload
-    b = bayes.bayesbest.Bayes_Classifier()
     for sender, message in messaging_events(payload):
         print "Incoming from %s: %s" % (sender, message)
         # send_message(PAT, sender, message)

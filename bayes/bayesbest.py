@@ -217,6 +217,7 @@ class Bayes_Classifier:
         u = pickle.Unpickler(f)
         dObj = u.load()
         f.close()
+        print "zzzHERE", dObj.num_files
         return dObj
 
     def tokenize(self, sText): 
