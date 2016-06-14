@@ -49,7 +49,7 @@ def handle_messages():
             and tokens[1].lower() == "new"):
             t = TTTBoard()
             # player1 = Player(1, Player.HUMAN)
-            # player2 = Player(2, Player.ABPRUNE)
+            # player2 = Player(2, Player.ABPRUNE, ply=9)
             # t.hostGame(player1, player2)
             send_message(PAT, sender, str(t) + "\nYou go first")
             t.saveGame(sender + ttt_extension)
@@ -58,20 +58,31 @@ def handle_messages():
                 t = TTTBoard()
                 t = t.loadGame(sender + ttt_extension)
                 move = int(tokens[1])
-                if t.legalMove(1, move):
+                if t.hasWon(1) or t.hasWon(2):
+                    send_message(PAT, sender, "Game over\nStart new game with TTT new")
+                elif t.legalMove(1, move):
                     t.makeMove(1, move)
                     send_message(PAT, sender, str(t))
+                    if t.hasWon(1):
+                        winner = 1
+                        send_message(PAT, sender, "You win!")
 
                     # Bot responds
-                    player2 = Player(2, Player.ABPRUNE)
+                    player2 = Player(2, Player.ABPRUNE, ply=9)
                     ab_move = player2.chooseMove(t)
                     t.makeMove(2, ab_move)
                     send_message(PAT, sender, str(t))
+                    if t.hasWon(2):
+                        winner = 2
+                        send_message(PAT, sender, "I win!")
                     
                     t.saveGame(sender + ttt_extension)
+                else:
+                    send_message(PAT, sender, "Illegal move")
 
             except Exception as e:
-                err_msg = "Something went wrong...\n" + str(e)
+                print e
+                err_msg = "Something went wrong...\nMake sure you are choosing a valid square"
                 send_message(PAT, sender, err_msg)
 
         # Echo
