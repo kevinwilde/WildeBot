@@ -5,7 +5,8 @@ import requests
 from globalvars import *
 # import bayesbest
 # import classdata
-import TicTacToe
+from TicTacToe import *
+from Player import *
 
 
 app = Flask(__name__)
