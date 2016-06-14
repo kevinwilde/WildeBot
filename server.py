@@ -23,13 +23,14 @@ def handle_messages():
     print "Handling Messages"
     payload = request.get_data()
     print payload
+    b = bayes.bayesbest.Bayes_Classifier()
     for sender, message in messaging_events(payload):
         print "Incoming from %s: %s" % (sender, message)
-        if len(message) > 9 and message[0:9].lower() == "classify:":
-            b = bayes.bayesbest.Bayes_Classifier()
+        tokens = b.tokenize(message)
+        if len(tokens) > 0 and tokens[0].lower() == "classify":
             res = b.classify(message)
             send_message(PAT, sender, res)
-        elif len(message) > 8 and message[0:8].lower() == "reverse:":
+        elif len(tokens) > 0 and tokens[0].lower() == "reverse:":
             reverse_message = message[::-1]
             send_message(PAT, sender, reverse_message)
         else:

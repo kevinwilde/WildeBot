@@ -26,9 +26,11 @@ class Bayes_Classifier:
             self.pos_data = self.load(self.pos_data_filename)
 
         # Couldn't load saved data files, so need to train
-        except (OSError, IOError):
+        except (OSError, IOError) as e:
+            print e
             self.train(self.get_file_list())
 
+        print "Num neg, pos files", self.neg_data.num_files, self.pos_data.num_files
 
     def get_file_list(self):
         """Get list of all files in reviews directory"""
