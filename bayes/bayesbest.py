@@ -128,6 +128,10 @@ class Bayes_Classifier:
         min_feature_frequency = 7
 
         total_file_count = self.neg_data.num_files + self.pos_data.num_files
+        
+        if total_file_count <= 0:
+            return "No training files"
+
         prob_neg_prior = self.neg_data.num_files / float(total_file_count)
         prop_pos_prior = self.pos_data.num_files / float(total_file_count)
 
