@@ -66,7 +66,7 @@ def handle_messages():
                     send_message(PAT, sender, str(t))
                     t.saveGame(sender + ttt_extension)
 
-            except e:
+            except Exception as e:
                 err_msg = "Something went wrong...\n" + str(e)
                 send_message(PAT, sender, err_msg)
 
