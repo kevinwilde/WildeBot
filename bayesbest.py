@@ -16,9 +16,9 @@ class Bayes_Classifier:
         the system will proceed through training.  After running this method, the classifier 
         is ready to classify input text."""
         
-        self.reviews_directory = "movies_reviews/"
-        self.neg_data_filename = "neg_data_best.pickle"
-        self.pos_data_filename = "pos_data_best.pickle"
+        self.reviews_directory = "bayes/movies_reviews/"
+        self.neg_data_filename = "bayes/neg_data_best.pickle"
+        self.pos_data_filename = "bayes/pos_data_best.pickle"
 
         # Try to load saved data files
         try:

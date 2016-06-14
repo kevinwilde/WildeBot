@@ -2,12 +2,13 @@ from flask import Flask, request
 import json
 import requests
 
-import bayes.bayesbest
+import bayesbest
+import classdata
 
 app = Flask(__name__)
 
 PAT = '***REMOVED***'
-b = bayes.bayesbest.Bayes_Classifier()
+b = bayesbest.Bayes_Classifier()
 
 @app.route('/', methods=['GET'])
 def handle_verification():
@@ -66,5 +67,5 @@ def send_message(token, recipient, text):
     if r.status_code != requests.codes.ok:
         print r.text
 
-if __name__ == '__main__':
-    app.run(debug=True)
+#if __name__ == '__main__':
+    #app.run(debug=True)
