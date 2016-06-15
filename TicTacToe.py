@@ -148,6 +148,3 @@ class TTTBoard:
             u = pickle.Unpickler(f)
             dObj = u.load()
         return dObj
-
-t = TTTBoard()
-t.hostGame(Player(1, Player.HUMAN), Player(2, Player.ABPRUNE, 9))
