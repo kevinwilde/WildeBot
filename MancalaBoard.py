@@ -1,7 +1,4 @@
-# File: MancalaGame.py
-# Defines a game of Mancala
-# You do not need to modify this file, but if you find bugs let me know.
-
+import pickle
 from random import *
 from copy import *
 from Player import *
@@ -21,7 +18,7 @@ class MancalaBoard:
         self.P1Cups = [4]*self.NCUPS
         self.P2Cups = [4]*self.NCUPS
 
-    def __repr__(self):
+    def __str__(self):
         ret = "P L A Y E R  2\n"
         ret += "\t6\t5\t4\t3\t2\t1\n"
         ret += "------------------------------------------------------------\n"
@@ -37,20 +34,26 @@ class MancalaBoard:
         ret += "P L A Y E R  1\n"        
         return ret
         
-    def legalMove( self, player, cup ):
+    def legalMove( self, playerNum, cup ):
         """ Returns whether or not a given move is legal or not"""
-        if player.num == 1:
+        if playerNum == 1:
             cups = self.P1Cups
-        else:
+        elif playerNum == 2:
             cups = self.P2Cups
+        else:
+            print playerNum
+            raise ValueError("playerNum must be 1 or 2")
         return cup > 0 and cup <= len(cups) and cups[cup-1] > 0
 
-    def legalMoves( self, player ):
+    def legalMoves( self, playerNum ):
         """ Returns a list of legal moves for the given player """
-        if player.num == 1:
+        if playerNum == 1:
             cups = self.P1Cups
-        else:
+        elif playerNum == 2:
             cups = self.P2Cups
+        else:
+            print playerNum
+            raise ValueError("playerNum must be 1 or 2")
         moves = []
         for m in range(len(cups)):
             if cups[m] != 0:
@@ -58,8 +61,8 @@ class MancalaBoard:
         return moves
 
 
-    def makeMove( self, player, cup ):
-        again = self.makeMoveHelp(player, cup)
+    def makeMove( self, playerNum, cup ):
+        again = self.makeMoveHelp(playerNum, cup)
         if self.gameOver():
             # clear out the cups
             for i in range(len(self.P1Cups)):
@@ -72,16 +75,19 @@ class MancalaBoard:
         else:
             return again
             
-    def makeMoveHelp( self, player, cup ):
+    def makeMoveHelp( self, playerNum, cup ):
         """ Make a move for the given player.
             Returns True if the player gets another turn and False if not.
             Assumes a legal move"""
-        if player.num == 1:
+        if playerNum == 1:
             cups = self.P1Cups
             oppCups = self.P2Cups
-        else:
+        elif playerNum == 2:
             cups = self.P2Cups
             oppCups = self.P1Cups
+        else:
+            print playerNum
+            raise ValueError("playerNum must be 1 or 2")
         initCups = cups
         nstones = cups[cup-1]  # Pick up the stones
         cups[cup-1] = 0        # Now the cup is empty
@@ -96,7 +102,7 @@ class MancalaBoard:
             if nstones == 0:
                 break    # If no more stones, exit the loop
             if cups == initCups:   # If we're on our own side
-                self.scoreCups[player.num-1] += 1
+                self.scoreCups[playerNum-1] += 1
                 nstones = nstones - 1
                 playAgain = True
             # now switch sides and keep going
@@ -112,11 +118,11 @@ class MancalaBoard:
         
         # Now see if we ended in a blank space on our side
         if cups == initCups and cups[cup-2] == 1:
-            self.scoreCups[player.num-1] += oppCups[(self.NCUPS-cup)+1]
+            self.scoreCups[playerNum-1] += oppCups[(self.NCUPS-cup)+1]
             oppCups[(self.NCUPS-cup)+1] = 0
             #added 2 lines so that when lands on own open cup, captures
             # opposite stones in addition to my own 1
-            self.scoreCups[player.num-1] += 1
+            self.scoreCups[playerNum-1] += 1
             cups[cup-2] = 0
         return False
 
@@ -132,8 +138,11 @@ class MancalaBoard:
         """ Return the cups for the given player """
         if playerNum == 1:
             return self.P1Cups
-        else:
+        elif playerNum == 2:
             return self.P2Cups
+        else:
+            print playerNum
+            raise ValueError("playerNum must be 1 or 2")
         
     def gameOver(self):
         """ Is the game over?"""
@@ -159,10 +168,10 @@ class MancalaBoard:
             while again:
                 print self
                 move = currPlayer.chooseMove( self )
-                while not(self.legalMove(currPlayer, move)):
+                while not(self.legalMove(currPlayer.num, move)):
                     print move, " is not legal"
                     move = currPlayer.chooseMove(self)
-                again = self.makeMove( currPlayer, move )
+                again = self.makeMove( currPlayer.num, move )
             temp = currPlayer
             currPlayer = waitPlayer
             waitPlayer = temp
@@ -174,3 +183,16 @@ class MancalaBoard:
             print "Player", waitPlayer, " wins!"
         else:
             print "Tie Game"
+
+    def saveGame(self, filename):
+        """Given a file name, save the current game to the file using pickle."""
+        with open(filename, "w") as f:
+            p = pickle.Pickler(f)
+            p.dump(self)
+
+    def loadGame(self, filename):
+        """Given a file name, load and return the object stored in the file."""
+        with open(filename, "r") as f:
+            u = pickle.Unpickler(f)
+            dObj = u.load()
+        return dObj

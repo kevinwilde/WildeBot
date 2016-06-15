@@ -5,8 +5,9 @@ import requests
 from globalvars import *
 # import bayesbest
 # import classdata
-from TicTacToe import *
+from MancalaBoard import *
 from Player import *
+from TicTacToe import *
 
 
 app = Flask(__name__)
@@ -15,7 +16,7 @@ app = Flask(__name__)
 @app.route('/', methods=['GET'])
 def handle_verification():
     print "Handling Verification: ->"
-    if request.args.get('hub.verify_token', '') == password:
+    if request.args.get('hub.verify_token', '') == PASSWORD:
         print "Verification successful!"
         return request.args.get('hub.challenge', '')
     else:
@@ -52,11 +53,11 @@ def handle_messages():
             # player2 = Player(2, Player.ABPRUNE, ply=9)
             # t.hostGame(player1, player2)
             send_message(PAT, sender, str(t) + "\nYou go first")
-            t.saveGame(sender + ttt_extension)
+            t.saveGame(sender + TTT_EXTENSION)
         elif (len(tokens) > 1 and tokens[0].lower() =="ttt"):
             try:
                 t = TTTBoard()
-                t = t.loadGame(sender + ttt_extension)
+                t = t.loadGame(sender + TTT_EXTENSION)
                 move = int(tokens[1])
                 if t.gameOver():
                     send_message(PAT, sender, "Game over\nStart new game with TTT new")
@@ -64,8 +65,11 @@ def handle_messages():
                     t.makeMove(1, move)
                     send_message(PAT, sender, str(t))
                     
-                    if t.hasWon(1):
-                        send_message(PAT, sender, "You win!")
+                    if t.gameOver():
+                        if t.hasWon(1):
+                            send_message(PAT, sender, "You win!")
+                        else:
+                            send_message(PAT, sender, "Cat's game")
 
                     # Bot responds
                     else:
@@ -74,10 +78,59 @@ def handle_messages():
                         t.makeMove(2, ab_move)
                         send_message(PAT, sender, str(t))
                         
-                        if t.hasWon(2):
-                            send_message(PAT, sender, "I win!")
+                        if t.gameOver():
+                            if t.hasWon(2):
+                                send_message(PAT, sender, "I win!")
+                            else:
+                                send_message(PAT, sender, "Cat's game")
                     
-                    t.saveGame(sender + ttt_extension)
+                    t.saveGame(sender + TTT_EXTENSION)
+                else:
+                    send_message(PAT, sender, "Illegal move")
+
+            except Exception as e:
+                print e
+                err_msg = "Something went wrong...\nMake sure you are choosing a valid square"
+                send_message(PAT, sender, err_msg)
+
+        # Mancala
+        elif (len(tokens) > 1 
+            and tokens[0].lower() =="mancala"
+            and tokens[1].lower() == "new"):
+            m = MancalaBoard()
+            send_message(PAT, sender, str(m) + "\nYou go first")
+            m.saveGame(sender + MANCALA_EXTENSION)
+        elif (len(tokens) > 1 and tokens[0].lower() =="mancala"):
+            try:
+                m = MancalaBoard()
+                m = m.loadGame(sender + MANCALA_EXTENSION)
+                move = int(tokens[1])
+                if m.gameOver():
+                    send_message(PAT, sender, "Game over\nStart new game with Mancala new")
+                elif m.legalMove(1, move):
+                    m.makeMove(1, move)
+                    send_message(PAT, sender, str(m))
+                    
+                    if m.gameOver():
+                        if m.hasWon(1):
+                            send_message(PAT, sender, "You win!")
+                        else:
+                            send_message(PAT, sender, "Cat's game")
+
+                    # Bot responds
+                    else:
+                        player2 = Player(2, Player.ABPRUNE, ply=9)
+                        ab_move = player2.chooseMove(m)
+                        m.makeMove(2, ab_move)
+                        send_message(PAT, sender, str(m))
+                        
+                        if m.gameOver():
+                            if m.hasWon(2):
+                                send_message(PAT, sender, "I win!")
+                            else:
+                                send_message(PAT, sender, "Cat's game")
+                    
+                    m.saveGame(sender + MANCALA_EXTENSION)
                 else:
                     send_message(PAT, sender, "Illegal move")
 

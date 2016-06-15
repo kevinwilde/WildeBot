@@ -49,7 +49,7 @@ class TTTBoard:
             self.board[move] = 'O'
         else:
             print playerNum
-            raise ValueError
+            raise ValueError("playerNum must be 1 or 2")
         return True
     
     def rowWin( self, c ):
@@ -92,7 +92,7 @@ class TTTBoard:
             return self.hasWonPlayer( "O" )
         else:
             print playerNum
-            raise ValueError
+            raise ValueError("playerNum must be 1 or 2")
 
     def gameOver(self):
         """ Returns True if the game is over, and false if not"""
