@@ -114,6 +114,8 @@ def handle_messages():
                     if m.gameOver():
                         if m.hasWon(1):
                             send_message(PAT, sender, "You win!")
+                        elif m.hasWon(2):
+                            send_message(PAT, sender, "I win!")
                         else:
                             send_message(PAT, sender, "Cat's game")
 
@@ -125,7 +127,9 @@ def handle_messages():
                         send_message(PAT, sender, str(m))
                         
                         if m.gameOver():
-                            if m.hasWon(2):
+                            if m.hasWon(1):
+                                send_message(PAT, sender, "You win!")
+                            elif m.hasWon(2):
                                 send_message(PAT, sender, "I win!")
                             else:
                                 send_message(PAT, sender, "Cat's game")
