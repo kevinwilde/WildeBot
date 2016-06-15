@@ -119,7 +119,7 @@ def handle_messages():
 
                     # Bot responds
                     else:
-                        player2 = Player(2, Player.ABPRUNE, ply=9)
+                        player2 = Player(2, Player.CUSTOM, ply=9)
                         ab_move = player2.chooseMove(m)
                         m.makeMove(2, ab_move)
                         send_message(PAT, sender, str(m))

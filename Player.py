@@ -7,7 +7,7 @@
 from random import *
 from decimal import *
 from copy import *
-from MancalaBoard import *
+# from MancalaBoard import *
 
 # a constant
 INFINITY = 1.0e400
@@ -38,7 +38,7 @@ class Player(object):
         move = -1
         score = -INFINITY
         turn = self
-        for m in board.legalMoves(self):
+        for m in board.legalMoves(self.num):
             #for each legal move
             if ply == 0:
                 #if we're at ply 0, we need to call our eval function & return
@@ -65,7 +65,7 @@ class Player(object):
         if board.gameOver():
             return turn.score(board)
         score = -INFINITY
-        for m in board.legalMoves(self):
+        for m in board.legalMoves(self.num):
             if ply == 0:
                 #print "turn.score(board) in max value is: " + str(turn.score(board))
                 return turn.score(board)
@@ -86,7 +86,7 @@ class Player(object):
         if board.gameOver():
             return turn.score(board)
         score = INFINITY
-        for m in board.legalMoves(self):
+        for m in board.legalMoves(self.num):
             if ply == 0:
                 #print "turn.score(board) in min Value is: " + str(turn.score(board))
                 return turn.score(board)
@@ -131,7 +131,7 @@ class Player(object):
         move = -1
         score = -INFINITY
         turn = self
-        for m in board.legalMoves(self):
+        for m in board.legalMoves(self.num):
             #for each legal move
             if ply == 0:
                 #if we're at ply 0, we need to call our eval function & return
@@ -158,7 +158,7 @@ class Player(object):
         if board.gameOver():
             return turn.score(board)
         score = -INFINITY
-        for m in board.legalMoves(self):
+        for m in board.legalMoves(self.num):
             if ply == 0:
                 #print "turn.score(board) in max value is: " + str(turn.score(board))
                 return turn.score(board)
@@ -182,7 +182,7 @@ class Player(object):
         if board.gameOver():
             return turn.score(board)
         score = INFINITY
-        for m in board.legalMoves(self):
+        for m in board.legalMoves(self.num):
             if ply == 0:
                 #print "turn.score(board) in min Value is: " + str(turn.score(board))
                 return turn.score(board)
@@ -204,12 +204,12 @@ class Player(object):
         """ Returns the next move that this player wants to make """
         if self.type == self.HUMAN:
             move = input("Please enter your move:")
-            while not board.legalMove(self, move):
+            while not board.legalMove(self.num, move):
                 print move, "is not valid"
                 move = input( "Please enter your move" )
             return move
         elif self.type == self.RANDOM:
-            move = choice(board.legalMoves(self))
+            move = choice(board.legalMoves(self.num))
             print "chose move", move
             return move
         elif self.type == self.MINIMAX:
@@ -226,15 +226,13 @@ class Player(object):
             # function.  You may use whatever search algorithm and scoring
             # algorithm you like.  Remember that your player must make
             # each move in about 10 seconds or less.
-            plyFor10Sec = 9
-            customPlayer = kjw731(self.num, self.type, plyFor10Sec)
-            val, move = customPlayer.customMove(board, customPlayer.ply)
+            customPlayer = kjw731(self.num, self.type, self.ply)
+            val, move = customPlayer.customMove(board, self.ply)
             print "chose move", move, " with value", val
             return move
         elif self.type == self.CUSTOM_ALT:
-            plyFor10Sec = 9
-            customPlayer = kjw731_Alt(self.num, self.type, plyFor10Sec)
-            val, move = customPlayer.customMove(board, customPlayer.ply)
+            customPlayer = kjw731_Alt(self.num, self.type, self.ply)
+            val, move = customPlayer.customMove(board, self.ply)
             print "chose move", move, " with value", val
             return move
         else:
