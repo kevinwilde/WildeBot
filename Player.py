@@ -1,8 +1,3 @@
-# File: Player.py
-# Author(s) names AND netid's: Kevin Cheng (klc954) and Kevin Wilde (kjw731)
-# Date: April 22, 2016
-# Group work statement: All group members were
-#      present and contributing during all work on this project.
 # Defines a simple artificially intelligent player agent
 # You will define the alpha-beta pruning search algorithm
 # You will also define the score function in the MancalaPlayer class,
@@ -17,7 +12,7 @@ from MancalaBoard import *
 # a constant
 INFINITY = 1.0e400
 
-class Player:
+class Player(object):
     """ A basic AI (or human) player """
     HUMAN = 0
     RANDOM = 1
@@ -52,7 +47,7 @@ class Player:
                 return (-1, -1)  # Can't make a move, the game is over
             nb = deepcopy(board)
             #make a new board
-            nb.makeMove(self, m)
+            nb.makeMove(self.num, m)
             #try the move
             opp = Player(self.opp, self.type, self.ply)
             s = opp.minValue(nb, ply-1, turn)
@@ -78,7 +73,7 @@ class Player:
             opponent = Player(self.opp, self.type, self.ply)
             # Copy the board so that we don't ruin it
             nextBoard = deepcopy(board)
-            nextBoard.makeMove(self, m)
+            nextBoard.makeMove(self.num, m)
             s = opponent.minValue(nextBoard, ply-1, turn)
             #print "s in maxValue is: " + str(s)
             if s > score:
@@ -99,7 +94,7 @@ class Player:
             opponent = Player(self.opp, self.type, self.ply)
             # Copy the board so that we don't ruin it
             nextBoard = deepcopy(board)
-            nextBoard.makeMove(self, m)
+            nextBoard.makeMove(self.num, m)
             s = opponent.maxValue(nextBoard, ply-1, turn)
             #print "s in minValue is: " + str(s)
             if s < score:
@@ -145,7 +140,7 @@ class Player:
                 return (-1, -1)  # Can't make a move, the game is over
             nb = deepcopy(board)
             #make a new board
-            nb.makeMove(self, m)
+            nb.makeMove(self.num, m)
             #try the move
             opp = Player(self.opp, self.type, self.ply)
             s = opp.minValueAlphaBeta(nb, ply-1, turn, -INFINITY, INFINITY)
@@ -171,7 +166,7 @@ class Player:
             opponent = Player(self.opp, self.type, self.ply)
             # Copy the board so that we don't ruin it
             nextBoard = deepcopy(board)
-            nextBoard.makeMove(self, m)
+            nextBoard.makeMove(self.num, m)
             s = opponent.minValueAlphaBeta(nextBoard, ply-1, turn, alpha, beta)
             #print "s in maxValue is: " + str(s)
             if s > score:
@@ -195,7 +190,7 @@ class Player:
             opponent = Player(self.opp, self.type, self.ply)
             # Copy the board so that we don't ruin it
             nextBoard = deepcopy(board)
-            nextBoard.makeMove(self, m)
+            nextBoard.makeMove(self.num, m)
             s = opponent.maxValueAlphaBeta(nextBoard, ply-1, turn, alpha, beta)
             #print "s in minValue is: " + str(s)
             if s < score:

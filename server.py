@@ -58,14 +58,13 @@ def handle_messages():
                 t = TTTBoard()
                 t = t.loadGame(sender + ttt_extension)
                 move = int(tokens[1])
-                if t.hasWon(1) or t.hasWon(2):
+                if t.gameOver():
                     send_message(PAT, sender, "Game over\nStart new game with TTT new")
                 elif t.legalMove(1, move):
                     t.makeMove(1, move)
                     send_message(PAT, sender, str(t))
                     
                     if t.hasWon(1):
-                        winner = 1
                         send_message(PAT, sender, "You win!")
 
                     # Bot responds
@@ -76,7 +75,6 @@ def handle_messages():
                         send_message(PAT, sender, str(t))
                         
                         if t.hasWon(2):
-                            winner = 2
                             send_message(PAT, sender, "I win!")
                     
                     t.saveGame(sender + ttt_extension)

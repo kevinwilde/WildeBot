@@ -19,6 +19,8 @@ class TTTBoard:
                 ret+=self.board[i]
             if (i+1) % 3 == 0:
                 ret+="\n"
+            else:
+                ret += " "
         ret += "\n"
         return ret
 
@@ -40,10 +42,14 @@ class TTTBoard:
         move = pos
         if move not in range(len(self.board)) or self.board[move] != ' ':
             return False
+
         if playerNum == 1:
             self.board[move] = 'X'
-        else:
+        elif playerNum == 2:
             self.board[move] = 'O'
+        else:
+            print playerNum
+            raise ValueError
         return True
     
     def rowWin( self, c ):
@@ -82,8 +88,11 @@ class TTTBoard:
         """ Returns who has won: X, O, or None"""
         if playerNum == 1:
             return self.hasWonPlayer( "X" )
-        else:
+        elif playerNum == 2:
             return self.hasWonPlayer( "O" )
+        else:
+            print playerNum
+            raise ValueError
 
     def gameOver(self):
         """ Returns True if the game is over, and false if not"""
@@ -110,7 +119,7 @@ class TTTBoard:
         while winner == 0 and rounds < self.SIZE*self.SIZE:
             print( self )
             pos = turn.chooseMove(self)
-            self.makeMove( turn, pos )
+            self.makeMove( turn.num, pos )
             if self.hasWon(turn.num):
                 winner = turn.num
             temp = turn
@@ -139,3 +148,6 @@ class TTTBoard:
             u = pickle.Unpickler(f)
             dObj = u.load()
         return dObj
+
+t = TTTBoard()
+t.hostGame(Player(1, Player.HUMAN), Player(2, Player.ABPRUNE, 9))
