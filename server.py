@@ -5,9 +5,9 @@ import requests
 from globalvars import *
 # import bayesbest
 # import classdata
-from MancalaBoard import *
-from Player import *
-from TicTacToe import *
+from games.MancalaBoard import *
+from games.Player import *
+from games.TicTacToe import *
 
 
 app = Flask(__name__)
