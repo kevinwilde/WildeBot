@@ -112,8 +112,7 @@ def handle_messages():
                 elif m.turn != 1:
                     send_message(PAT, sender, "Not your turn yet")
 
-                while m.turn == 1 and not m.gameOver():
-                    send_message(PAT, sender, "Your turn")
+                else:
                     if m.legalMove(1, move):
                         m.makeMove(1, move)
                         send_message(PAT, sender, str(m))
@@ -127,8 +126,10 @@ def handle_messages():
                     ab_move = player2.chooseMove(m)
                     m.makeMove(2, ab_move)
                     send_message(PAT, sender, str(m))
-                
-                if m.gameOver():
+
+                if m.turn == 1:
+                    send_message(PAT, sender, "Your turn again")
+                elif m.gameOver():
                     if m.hasWon(1):
                         send_message(PAT, sender, "You win!")
                     elif m.hasWon(2):
