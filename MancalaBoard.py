@@ -20,20 +20,18 @@ class MancalaBoard:
         self.turn = 1
 
     def __str__(self):
-        ret = "P L A Y E R  2\n"
-        ret += "\t6\t5\t4\t3\t2\t1\n"
-        ret += "------------------------------------------------------------\n"
-        ret += str(self.scoreCups[1]) + "\t"
-        for elem in range(len(self.P2Cups)-1, -1, -1):
-            ret += str(self.P2Cups[elem]) + "\t"
-        ret += "\n\t"
-        for elem in self.P1Cups:
-            ret += str(elem) + "\t"
-        ret += str(self.scoreCups[0])
-        ret += "\n------------------------------------------------------------"
-        ret += "\n\t1\t2\t3\t4\t5\t6\n"
-        ret += "P L A Y E R  1\n"        
+        ret = " "*5 + "You\n" # Player 1
+        ret += " "*6 + str(self.scoreCups[0]) + "\n" # Player 1 mancala
+        
+        for i in range(self.NCUPS):
+            ret += (str(i+1) + " (" + str(self.P2Cups[i]) + ") | ("
+                    + str(self.P1Cups[self.NCUPS-1-i]) + ") " + str(self.NCUPS-i) + "\n")
+        
+        ret += " "*6 + str(self.scoreCups[1]) + "\n"  # Player 2 mancala
+        ret += " "*5 + "Me\n" # Player 2
+        
         return ret
+
         
     def legalMove( self, playerNum, cup ):
         """ Returns whether or not a given move is legal or not"""

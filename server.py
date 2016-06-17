@@ -124,6 +124,7 @@ def handle_messages():
                     send_message(PAT, sender, "My turn")
                     player2 = Player(2, Player.CUSTOM, ply=9)
                     ab_move = player2.chooseMove(m)
+                    send_message(PAT, sender, "I choose " + str(ab_move))
                     m.makeMove(2, ab_move)
                     send_message(PAT, sender, str(m))
 
