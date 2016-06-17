@@ -157,33 +157,7 @@ class MancalaBoard:
         for elem in self.P2Cups:
             if elem != 0:
                 over = False
-        return over   
-
-    def hostGame(self, player1, player2):
-        """ Host a game between two players """
-        self.reset()
-        currPlayer = player1 
-        waitPlayer = player2
-        while not(self.gameOver()):
-            again = True
-            while again:
-                print self
-                move = currPlayer.chooseMove( self )
-                while not(self.legalMove(currPlayer.num, move)):
-                    print move, " is not legal"
-                    move = currPlayer.chooseMove(self)
-                again = self.makeMove( currPlayer.num, move )
-            temp = currPlayer
-            currPlayer = waitPlayer
-            waitPlayer = temp
-
-        print self
-        if self.hasWon(currPlayer.num):
-            print "Player", currPlayer, " wins!"
-        elif self.hasWon(waitPlayer.num):
-            print "Player", waitPlayer, " wins!"
-        else:
-            print "Tie Game"
+        return over
 
     def saveGame(self, filename):
         """Given a file name, save the current game to the file using pickle."""

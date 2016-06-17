@@ -110,34 +110,6 @@ class TTTBoard:
     def reset( self ):
         """ Reset the board for a new game """
         self.board = [' ']*(self.SIZE*self.SIZE)
-            
-
-    def hostGame( self, player1, player2 ):
-        """ Host a game of tic tac toe between two players"""
-        self.players = [player1, player2]
-        turn = player1      # Keep track of whose turn it is
-        wait = player2
-        winner = 0
-        rounds = 0
-        while winner == 0 and rounds < self.SIZE*self.SIZE:
-            print( self )
-            pos = turn.chooseMove(self)
-            self.makeMove( turn.num, pos )
-            if self.hasWon(turn.num):
-                winner = turn.num
-            temp = turn
-            turn = wait
-            wait = temp
-            rounds += 1
-        print self
-        if winner == 0:
-            print "Tie Game"
-        else:
-            if winner == 1:
-                print "X wins!"
-            else:
-                print "O wins!"
-
 
     def saveGame(self, filename):
         """Given a file name, save the current game to the file using pickle."""
