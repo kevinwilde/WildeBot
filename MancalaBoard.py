@@ -20,15 +20,14 @@ class MancalaBoard:
         self.turn = 1
 
     def __str__(self):
-        ret = " "*5 + "You\n" # Player 1
-        ret += " "*6 + str(self.scoreCups[0]) + "\n" # Player 1 mancala
+        offset = [8 - len(str(self.scoreCups[0])), 9 - len(str(self.scoreCups[1]))]
+        ret = "="*offset[0] + " " + str(self.scoreCups[0]) + " You\n" # Player 1 mancala
         
         for i in range(self.NCUPS):
             ret += (str(i+1) + " (" + str(self.P2Cups[i]) + ") | ("
                     + str(self.P1Cups[self.NCUPS-1-i]) + ") " + str(self.NCUPS-i) + "\n")
         
-        ret += " "*6 + str(self.scoreCups[1]) + "\n"  # Player 2 mancala
-        ret += " "*5 + "Me\n" # Player 2
+        ret += "Me " + str(self.scoreCups[1]) + " " + "="*offset[1] + "\n"  # Player 2 mancala
         
         return ret
 
