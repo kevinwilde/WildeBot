@@ -6,7 +6,7 @@ class TTTBoard:
         """ Initializes the data members."""
         self.SIZE = 3
         self.board = [' ']*(self.SIZE*self.SIZE)
-        self.players = [None, None]
+        self.turn = 1
     
     def __str__(self):
         """ Returns a string representation of the board where
@@ -40,7 +40,9 @@ class TTTBoard:
     def makeMove( self, playerNum, pos ):
         """ Make a move for player in pos.  Assumes pos is a legal move. """
         move = pos
-        if move not in range(len(self.board)) or self.board[move] != ' ':
+        if (move not in range(len(self.board)) 
+            or self.board[move] != ' '
+            or self.turn != playerNum):
             return False
 
         if playerNum == 1:
@@ -50,6 +52,7 @@ class TTTBoard:
         else:
             print playerNum
             raise ValueError("playerNum must be 1 or 2")
+        self.turn = 2 - playerNum + 1
         return True
     
     def rowWin( self, c ):

@@ -61,6 +61,8 @@ def handle_messages():
                 move = int(tokens[1])
                 if t.gameOver():
                     send_message(PAT, sender, "Game over\nStart new game with TTT new")
+                elif t.turn != 1:
+                    send_message(PAT, sender, "Not your turn yet")
                 elif t.legalMove(1, move):
                     t.makeMove(1, move)
                     send_message(PAT, sender, str(t))
@@ -107,36 +109,34 @@ def handle_messages():
                 move = int(tokens[1])
                 if m.gameOver():
                     send_message(PAT, sender, "Game over\nStart new game with Mancala new")
-                elif m.legalMove(1, move):
-                    m.makeMove(1, move)
-                    send_message(PAT, sender, str(m))
-                    
-                    if m.gameOver():
-                        if m.hasWon(1):
-                            send_message(PAT, sender, "You win!")
-                        elif m.hasWon(2):
-                            send_message(PAT, sender, "I win!")
-                        else:
-                            send_message(PAT, sender, "Cat's game")
+                elif m.turn != 1:
+                    send_message(PAT, sender, "Not your turn yet")
 
-                    # Bot responds
-                    else:
-                        player2 = Player(2, Player.CUSTOM, ply=9)
-                        ab_move = player2.chooseMove(m)
-                        m.makeMove(2, ab_move)
+                while m.turn == 1 and not m.gameOver():
+                    send_message(PAT, sender, "Your turn")
+                    if m.legalMove(1, move):
+                        m.makeMove(1, move)
                         send_message(PAT, sender, str(m))
-                        
-                        if m.gameOver():
-                            if m.hasWon(1):
-                                send_message(PAT, sender, "You win!")
-                            elif m.hasWon(2):
-                                send_message(PAT, sender, "I win!")
-                            else:
-                                send_message(PAT, sender, "Cat's game")
-                    
-                    m.saveGame(sender + MANCALA_EXTENSION)
-                else:
-                    send_message(PAT, sender, "Illegal move")
+                    else:
+                        send_message(PAT, sender, "Illegal move")
+
+                # Bot responds
+                while m.turn == 2  and not m.gameOver():
+                    send_message(PAT, sender, "My turn")
+                    player2 = Player(2, Player.CUSTOM, ply=9)
+                    ab_move = player2.chooseMove(m)
+                    m.makeMove(2, ab_move)
+                    send_message(PAT, sender, str(m))
+                
+                if m.gameOver():
+                    if m.hasWon(1):
+                        send_message(PAT, sender, "You win!")
+                    elif m.hasWon(2):
+                        send_message(PAT, sender, "I win!")
+                    else:
+                        send_message(PAT, sender, "Cat's game")
+
+                m.saveGame(sender + MANCALA_EXTENSION)
 
             except Exception as e:
                 print e

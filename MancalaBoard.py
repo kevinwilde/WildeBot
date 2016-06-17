@@ -17,6 +17,7 @@ class MancalaBoard:
         self.scoreCups = [0, 0]
         self.P1Cups = [4]*self.NCUPS
         self.P2Cups = [4]*self.NCUPS
+        self.turn = 1
 
     def __str__(self):
         ret = "P L A Y E R  2\n"
@@ -71,8 +72,11 @@ class MancalaBoard:
             for i in range(len(self.P2Cups)):
                 self.scoreCups[1] += self.P2Cups[i]
                 self.P2Cups[i] = 0
+            self.turn = 0
             return False
         else:
+            if not again:
+                self.turn = 2 - playerNum + 1
             return again
             
     def makeMoveHelp( self, playerNum, cup ):
