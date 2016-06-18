@@ -1,6 +1,54 @@
 import pickle
 from Player import *
 
+def host_ttt_game(sender, tokens):
+    """Tic Tac Toe game hosted on server
+    """
+    if tokens[1].lower() == "new":
+        t = TTTBoard()
+        yield (str(t) + "\nYou go first")
+        t.saveGame(sender + TTT_EXTENSION)
+    else:
+        try:
+            t = TTTBoard()
+            t = t.loadGame(sender + TTT_EXTENSION)
+            move = int(tokens[1])
+            if t.gameOver():
+                yield "Game over\nStart new game with TTT new"
+            elif t.turn != 1:
+                yield "Not your turn yet"
+            elif t.legalMove(1, move):
+                t.makeMove(1, move)
+                yeild str(t)
+                
+                if t.gameOver():
+                    if t.hasWon(1):
+                        yield "You win!"
+                    else:
+                        yield "Cat's game"
+
+                # Bot responds
+                else:
+                    player2 = Player(2, Player.ABPRUNE, ply=9)
+                    ab_move = player2.chooseMove(t)
+                    t.makeMove(2, ab_move)
+                    yield str(t)
+                    
+                    if t.gameOver():
+                        if t.hasWon(2):
+                            yield "I win!"
+                        else:
+                            yield "Cat's game"
+                
+                t.saveGame(sender + TTT_EXTENSION)
+            else:
+                yield "Illegal move"
+
+        except Exception as e:
+            print e
+            err_msg = "Something went wrong...\nMake sure you are choosing a valid square"
+            yield err_msg
+
 class TTTBoard:
     def __init__(self):
         """ Initializes the data members."""
