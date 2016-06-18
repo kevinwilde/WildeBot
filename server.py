@@ -5,7 +5,9 @@ import requests
 from globalvars import *
 # import bayesbest
 # import classdata
-import games
+from games.Mancala import *
+from games.Player import *
+from games.TicTacToe import *
 
 
 app = Flask(__name__)
@@ -86,12 +88,12 @@ def host_ttt_game(sender, tokens):
     """Tic Tac Toe game hosted on server
     """
     if tokens[1].lower() == "new":
-        t = games.TicTacToe.TTTBoard()
+        t = TTTBoard()
         send_message(PAT, sender, str(t) + "\nYou go first")
         t.saveGame(sender + TTT_EXTENSION)
     else:
         try:
-            t = games.TicTacToe.TTTBoard()
+            t = TTTBoard()
             t = t.loadGame(sender + TTT_EXTENSION)
             move = int(tokens[1])
             if t.gameOver():
@@ -110,8 +112,8 @@ def host_ttt_game(sender, tokens):
 
                 # Bot responds
                 else:
-                    player2 = games.Player.Player(2, games.Player.Player.ABPRUNE, ply=9)
-                    ab_move = games.Player.player2.chooseMove(t)
+                    player2 = Player(2, Player.ABPRUNE, ply=9)
+                    ab_move = player2.chooseMove(t)
                     t.makeMove(2, ab_move)
                     send_message(PAT, sender, str(t))
                     
@@ -135,12 +137,12 @@ def host_mancala_game(sender, tokens):
     """Mancala game hosted on server
     """
     if tokens[1].lower() == "new":
-        m = games.Mancala.MancalaBoard()
+        m = MancalaBoard()
         send_message(PAT, sender, str(m) + "\nYou go first")
         m.saveGame(sender + MANCALA_EXTENSION)
     else:
         try:
-            m = games.Mancala.MancalaBoard()
+            m = MancalaBoard()
             m = m.loadGame(sender + MANCALA_EXTENSION)
             move = int(tokens[1])
             if m.gameOver():
@@ -158,8 +160,8 @@ def host_mancala_game(sender, tokens):
             # Bot responds
             while m.turn == 2  and not m.gameOver():
                 send_message(PAT, sender, "My turn")
-                player2 = games.Player.Player(2, games.Player.Player.CUSTOM, ply=9)
-                ab_move = games.Player.player2.chooseMove(m)
+                player2 = Player(2, Player.CUSTOM, ply=9)
+                ab_move = player2.chooseMove(m)
                 send_message(PAT, sender, "I choose " + str(ab_move))
                 m.makeMove(2, ab_move)
                 send_message(PAT, sender, str(m))
