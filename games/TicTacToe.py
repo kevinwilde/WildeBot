@@ -4,6 +4,7 @@ from Player import *
 def host_ttt_game(sender, tokens):
     """Tic Tac Toe game hosted on server
     """
+    ret = []
     if tokens[1].lower() == "new":
         t = TTTBoard()
         yield (str(t) + "\nYou go first")
@@ -19,7 +20,7 @@ def host_ttt_game(sender, tokens):
                 yield "Not your turn yet"
             elif t.legalMove(1, move):
                 t.makeMove(1, move)
-                yeild str(t)
+                yield str(t)
                 
                 if t.gameOver():
                     if t.hasWon(1):
