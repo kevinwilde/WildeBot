@@ -32,10 +32,9 @@ def handle_messages():
         print "Incoming from %s: %s" % (sender, message)
         tokens = b.tokenize(message)
 
-        # Classify
-        if len(tokens) > 0 and tokens[0].lower() == "classify":
-            res = b.classify(tokens[1:])
-            send_message(PAT, sender, res)
+        # Repeat
+        if len(tokens) > 0 and tokens[0].lower() == "repeat":
+            send_message(PAT, sender, message[len("repeat")+1:])
 
         # Reverse
         elif len(tokens) > 0 and tokens[0].lower() == "reverse":
@@ -50,9 +49,10 @@ def handle_messages():
         elif len(tokens) > 1 and tokens[0].lower() =="mancala":
             host_mancala_game(sender, tokens)
 
-        # Echo
+        # Bayes
         else:
-            send_message(PAT, sender, message)
+            _, score = b.classify(tokens[1:])
+            send_message(PAT, sender, react(score))
 
     return "ok"
 
@@ -231,6 +231,50 @@ def host_mancala_game(sender, tokens):
             print e
             err_msg = "Something went wrong...\nMake sure you are choosing a valid square"
             send_message(PAT, sender, err_msg)
+
+def react(score):
+    """Return string based on score
+    Positive scores get more positive reactions
+    Negative scores get more negative reactions
+    """
+    reactions = [
+        "I don't ever want to hear from you again", #0
+        "You actually suck", #1
+        "That is incredibly mean", #2
+        "I don't appreciate you saying that", #3
+        "Please find something nicer to say", #4
+        "K", #5
+        "Ok", #6
+        "Is that a compliment?", #7
+        "Thanks", #8
+        "You are the best :)", #9
+        "You just made my day! Thank you!", #10
+        "What an amazing thing to hear! The world sure could use more people like you", #11
+        ]
+    if score < -150:
+        return reactions[0]
+    elif score < -120:
+        return reactions[1]
+    elif score < -90:
+        return reactions[2]
+    elif score < -60:
+        return reactions[3]
+    elif score < -30:
+        return reactions[4]
+    elif score < -15:
+        return reactions[5]
+    elif score < 15:
+        return reactions[6]
+    elif score < 30:
+        return reactions[7]
+    elif score < 60:
+        return reactions[8]
+    elif score < 90:
+        return reactions[9]
+    elif score < 120:
+        return reactions[10]
+    else:
+        return reactions[11]
 
 if __name__ == '__main__':
     app.run(debug=True)

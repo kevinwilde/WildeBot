@@ -178,11 +178,11 @@ class Bayes_Classifier:
         epsilon = 0 if never_neutral else 3
         
         if abs(diff) < epsilon: # too close to call
-            return "neutral"
+            return "neutral", diff
         elif diff > 0:  # P(pos) > P(neg)
-            return "positive"
+            return "positive", diff
         else:           # P(pos) < P(neg)
-            return "negative"
+            return "negative", diff
 
 
     def loadFile(self, sFilename):
