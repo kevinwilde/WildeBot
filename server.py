@@ -51,8 +51,8 @@ def handle_messages():
 
         # Bayes
         else:
-            _, score = b.classify(tokens[1:])
-            send_message(PAT, sender, react(score))
+            diff = b.classify(tokens[1:])
+            send_message(PAT, sender, str(diff) + " " + react(diff))
 
     return "ok"
 

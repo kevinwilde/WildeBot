@@ -174,15 +174,15 @@ class Bayes_Classifier:
             sum_of_logs_given_pos += cond_prob_pos
 
         diff = sum_of_logs_given_pos - sum_of_logs_given_neg
+        return diff
+        # epsilon = 0 if never_neutral else 3
         
-        epsilon = 0 if never_neutral else 3
-        
-        if abs(diff) < epsilon: # too close to call
-            return "neutral", diff
-        elif diff > 0:  # P(pos) > P(neg)
-            return "positive", diff
-        else:           # P(pos) < P(neg)
-            return "negative", diff
+        # if abs(diff) < epsilon: # too close to call
+        #     return "neutral"
+        # elif diff > 0:  # P(pos) > P(neg)
+        #     return "positive"
+        # else:           # P(pos) < P(neg)
+        #     return "negative"
 
 
     def loadFile(self, sFilename):
