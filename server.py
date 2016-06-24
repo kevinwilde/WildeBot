@@ -51,7 +51,7 @@ def handle_messages():
 
         # Bayes
         else:
-            diff = b.classify(tokens[1:])
+            diff = b.classify(message)
             send_message(PAT, sender, str(diff) + " " + react(diff))
 
     return "ok"
@@ -251,13 +251,13 @@ def react(score):
         "You just made my day! Thank you!", #10
         "What an amazing thing to hear! The world sure could use more people like you", #11
         ]
-    if score < -150:
+    if score < -90:
         return reactions[0]
-    elif score < -120:
+    elif score < -75:
         return reactions[1]
-    elif score < -90:
-        return reactions[2]
     elif score < -60:
+        return reactions[2]
+    elif score < -45:
         return reactions[3]
     elif score < -30:
         return reactions[4]
@@ -267,11 +267,11 @@ def react(score):
         return reactions[6]
     elif score < 30:
         return reactions[7]
-    elif score < 60:
+    elif score < 45:
         return reactions[8]
-    elif score < 90:
+    elif score < 60:
         return reactions[9]
-    elif score < 120:
+    elif score < 75:
         return reactions[10]
     else:
         return reactions[11]
