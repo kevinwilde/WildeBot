@@ -8,7 +8,7 @@
 import math, os, pickle, re
 import classdata
 
-class Bayes_Classifier:
+class Bayes_Classifier(object):
 
     def __init__(self):
         """This method initializes and trains the Naive Bayes Sentiment Classifier.  If a 

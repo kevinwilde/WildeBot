@@ -1,7 +1,7 @@
 import pickle, unittest
 from Player import *
 
-class TTTBoard:
+class TTTBoard(object):
     def __init__(self):
         """ Initializes the data members."""
         self.SIZE = 3

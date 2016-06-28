@@ -32,8 +32,12 @@ def handle_messages():
         print "Incoming from %s: %s" % (sender, message)
         tokens = b.tokenize(message)
 
+        # Greeting
+        if len(tokens) > 0 and is_greeting(tokens[0]):
+            send_message(PAT, sender, "Hello")
+
         # Repeat
-        if len(tokens) > 0 and tokens[0].lower() == "repeat":
+        elif len(tokens) > 0 and tokens[0].lower() == "repeat":
             send_message(PAT, sender, message[len("repeat")+1:])
 
         # Reverse
@@ -82,6 +86,13 @@ def send_message(token, recipient, text):
         headers={'Content-type': 'application/json'})
     if r.status_code != requests.codes.ok:
         print r.text
+
+
+def is_greeting(word):
+    """Determines if word is a greeting
+    """
+    greetings = ["hi", "hello", "hey"]
+    return word.lower() in greetings
 
 
 def host_ttt_game(sender, tokens):

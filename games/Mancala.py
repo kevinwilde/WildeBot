@@ -1,4 +1,4 @@
-import pickle
+import pickle, unittest
 from random import *
 from copy import *
 from Player import *
@@ -6,7 +6,7 @@ from Player import *
 # some constants
 INFINITY = 1.0e400
 
-class MancalaBoard:
+class MancalaBoard(object):
     def __init__(self):
         """ Initilize a game board for the game of mancala"""
         self.reset()
@@ -171,3 +171,14 @@ class MancalaBoard:
             u = pickle.Unpickler(f)
             dObj = u.load()
         return dObj
+
+
+#### Unit Tests
+class TestMancala(unittest.TestCase):
+    def test_legalmoves_emptyboard(self):
+        m = MancalaBoard()
+        self.assertEqual(m.legalMoves(1), range(1,7))
+        self.assertEqual(m.legalMoves(2), range(1,7))
+
+if __name__ == '__main__':
+    unittest.main()

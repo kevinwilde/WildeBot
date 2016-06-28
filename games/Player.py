@@ -1,13 +1,8 @@
 # Defines a simple artificially intelligent player agent
-# You will define the alpha-beta pruning search algorithm
-# You will also define the score function in the MancalaPlayer class,
-# a subclass of the Player class.
-
 
 from random import *
 from decimal import *
 from copy import *
-# from MancalaBoard import *
 
 # a constant
 INFINITY = 1.0e400
