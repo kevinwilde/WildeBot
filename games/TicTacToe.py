@@ -1,4 +1,4 @@
-import pickle
+import pickle, unittest
 from Player import *
 
 class TTTBoard:
@@ -40,9 +40,11 @@ class TTTBoard:
     def makeMove( self, playerNum, pos ):
         """ Make a move for player in pos.  Assumes pos is a legal move. """
         move = pos
+        
         if (move not in range(len(self.board)) 
             or self.board[move] != ' '
             or self.turn != playerNum):
+
             return False
 
         if playerNum == 1:
@@ -123,3 +125,99 @@ class TTTBoard:
             u = pickle.Unpickler(f)
             dObj = u.load()
         return dObj
+
+
+#### Unit Tests
+class TestTTT(unittest.TestCase):
+    def test_legalmoves_emptyboard(self):
+        t = TTTBoard()
+        self.assertEqual(t.legalMoves(1), range(9))
+        self.assertEqual(t.legalMoves(2), range(9))
+
+    def test_legalmoves_fullboard(self):
+        t = TTTBoard()
+        for i in range(9):
+            self.assertTrue(t.makeMove(t.turn, i))
+        self.assertEqual(t.legalMoves(1), [])
+        self.assertEqual(t.legalMoves(2), [])
+
+    def test_legalmoves_partialboard(self):
+        t = TTTBoard()
+        self.assertTrue(t.makeMove(1, 0))
+        self.assertTrue(t.makeMove(2, 1))
+        self.assertTrue(t.makeMove(1, 2))
+        self.assertTrue(t.makeMove(2, 6))
+        self.assertTrue(t.makeMove(1, 8))
+        self.assertEqual(t.legalMoves(1), [3, 4, 5, 7])
+        self.assertEqual(t.legalMoves(2), [3, 4, 5, 7])
+
+    def test_disallow_illegal_move(self):
+        t = TTTBoard()
+        self.assertTrue(t.makeMove(1, 0))
+        self.assertFalse(t.makeMove(2, 0))
+
+    def test_disallow_when_wrong_turn(self):
+        t = TTTBoard()
+        self.assertTrue(t.makeMove(1, 0))
+        self.assertFalse(t.makeMove(1, 1))
+
+    def test_row_win(self):
+        t = TTTBoard()
+        t.makeMove(1, 0)
+        t.makeMove(2, 3)
+        t.makeMove(1, 1)
+        t.makeMove(2, 4)
+        t.makeMove(1, 2)
+        self.assertTrue(t.gameOver())
+        self.assertTrue(t.hasWon(1))
+
+    def test_col_win(self):
+        t = TTTBoard()
+        t.makeMove(1, 1)
+        t.makeMove(2, 0)
+        t.makeMove(1, 4)
+        t.makeMove(2, 3)
+        t.makeMove(1, 2)
+        t.makeMove(2, 6)
+        self.assertTrue(t.gameOver())
+        self.assertTrue(t.hasWon(2))
+
+    def test_diag_win_1(self):
+        t = TTTBoard()
+        t.makeMove(1, 0)
+        t.makeMove(2, 1)
+        t.makeMove(1, 4)
+        t.makeMove(2, 5)
+        t.makeMove(1, 8)
+        self.assertTrue(t.gameOver())
+        self.assertTrue(t.hasWon(1))
+
+    def test_diag_win_2(self):
+        t = TTTBoard()
+        t.makeMove(1, 0)
+        t.makeMove(2, 2)
+        t.makeMove(1, 1)
+        t.makeMove(2, 4)
+        t.makeMove(1, 8)
+        t.makeMove(2, 6)
+        self.assertTrue(t.gameOver())
+        self.assertTrue(t.hasWon(2))
+
+    def test_cats_game(self):
+        t = TTTBoard()
+        self.assertTrue(t.makeMove(1, 4))
+        self.assertTrue(t.makeMove(2, 0))
+        self.assertTrue(t.makeMove(1, 2))
+        self.assertTrue(t.makeMove(2, 6))
+        self.assertTrue(t.makeMove(1, 3))
+        self.assertTrue(t.makeMove(2, 5))
+        self.assertTrue(t.makeMove(1, 1))
+        self.assertTrue(t.makeMove(2, 7))
+        self.assertTrue(t.makeMove(1, 8))
+        self.assertTrue(t.gameOver())
+        self.assertFalse(t.hasWon(1))
+        self.assertFalse(t.hasWon(2))
+        
+
+if __name__ == '__main__':
+    unittest.main()
