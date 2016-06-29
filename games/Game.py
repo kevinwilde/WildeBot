@@ -10,6 +10,7 @@ class Game(object):
             p = pickle.Pickler(f)
             p.dump(self)
 
+    @staticmethod
     def loadGame(filename):
         """Given a file name, load and return the object stored in the file."""
         with open(filename, "r") as f:
