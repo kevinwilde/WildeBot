@@ -1,9 +1,14 @@
-import pickle, unittest
+import unittest
+from Game import *
 from Player import *
 
-class TTTBoard(object):
+class TTTBoard(Game):
     def __init__(self):
         """ Initializes the data members."""
+        self.reset()
+        
+    def reset( self ):
+        """ Reset the board for a new game """
         self.SIZE = 3
         self.board = [' ']*(self.SIZE*self.SIZE)
         self.turn = 1
@@ -108,23 +113,6 @@ class TTTBoard(object):
                 if move == ' ':
                     return False
             return True
-        
-    def reset( self ):
-        """ Reset the board for a new game """
-        self.board = [' ']*(self.SIZE*self.SIZE)
-
-    def saveGame(self, filename):
-        """Given a file name, save the current game to the file using pickle."""
-        with open(filename, "w") as f:
-            p = pickle.Pickler(f)
-            p.dump(self)
-
-    def loadGame(self, filename):
-        """Given a file name, load and return the object stored in the file."""
-        with open(filename, "r") as f:
-            u = pickle.Unpickler(f)
-            dObj = u.load()
-        return dObj
 
 
 #### Unit Tests

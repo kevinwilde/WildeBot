@@ -104,57 +104,7 @@ def host_ttt_game(sender, tokens):
         t.saveGame(sender + TTT_EXTENSION)
     else:
         try:
-            t = TTTBoard()
-            t = t.loadGame(sender + TTT_EXTENSION)
-            move = int(tokens[1])
-            if t.gameOver():
-                send_message(PAT, sender, "Game over\nStart new game with TTT new")
-            elif t.turn != 1:
-                send_message(PAT, sender, "Not your turn yet")
-            elif t.legalMove(1, move):
-                t.makeMove(1, move)
-                send_message(PAT, sender, str(t))
-                
-                if t.gameOver():
-                    if t.hasWon(1):
-                        send_message(PAT, sender, "You win!")
-                    else:
-                        send_message(PAT, sender, "Cat's game")
-
-                # Bot responds
-                else:
-                    player2 = Player(2, Player.ABPRUNE, ply=9)
-                    ab_move = player2.chooseMove(t)
-                    t.makeMove(2, ab_move)
-                    send_message(PAT, sender, str(t))
-                    
-                    if t.gameOver():
-                        if t.hasWon(2):
-                            send_message(PAT, sender, "I win!")
-                        else:
-                            send_message(PAT, sender, "Cat's game")
-                
-                t.saveGame(sender + TTT_EXTENSION)
-            else:
-                send_message(PAT, sender, "Illegal move")
-
-        except Exception as e:
-            print e
-            err_msg = "Something went wrong...\nMake sure you are choosing a valid square"
-            send_message(PAT, sender, err_msg)
-
-
-def host_ttt_game(sender, tokens):
-    """Tic Tac Toe game hosted on server
-    """
-    if tokens[1].lower() == "new":
-        t = TTTBoard()
-        send_message(PAT, sender, str(t) + "\nYou go first")
-        t.saveGame(sender + TTT_EXTENSION)
-    else:
-        try:
-            t = TTTBoard()
-            t = t.loadGame(sender + TTT_EXTENSION)
+            t = TTTBoard.loadGame(sender + TTT_EXTENSION)
             move = int(tokens[1])
             if t.gameOver():
                 send_message(PAT, sender, "Game over\nStart new game with TTT new")
@@ -202,8 +152,7 @@ def host_mancala_game(sender, tokens):
         m.saveGame(sender + MANCALA_EXTENSION)
     else:
         try:
-            m = MancalaBoard()
-            m = m.loadGame(sender + MANCALA_EXTENSION)
+            m = MancalaBoard.loadGame(sender + MANCALA_EXTENSION)
             move = int(tokens[1])
             if m.gameOver():
                 send_message(PAT, sender, "Game over\nStart new game with Mancala new")

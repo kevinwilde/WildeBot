@@ -1,12 +1,10 @@
-import pickle, unittest
+import unittest
 from random import *
 from copy import *
+from Game import *
 from Player import *
 
-# some constants
-INFINITY = 1.0e400
-
-class MancalaBoard(object):
+class MancalaBoard(Game):
     def __init__(self):
         """ Initilize a game board for the game of mancala"""
         self.reset()
@@ -60,6 +58,8 @@ class MancalaBoard(object):
 
 
     def makeMove( self, playerNum, cup ):
+        if playerNum != self.turn:
+            return False
         again = self.makeMoveHelp(playerNum, cup)
         if self.gameOver():
             # clear out the cups
@@ -146,39 +146,50 @@ class MancalaBoard(object):
             raise ValueError("playerNum must be 1 or 2")
         
     def gameOver(self):
-        """ Is the game over?"""
-        over = True
-        for elem in self.P1Cups:
-            if elem != 0:
-                over = False
-        if over:
-            return True
-        over = True
-        for elem in self.P2Cups:
-            if elem != 0:
-                over = False
-        return over
-
-    def saveGame(self, filename):
-        """Given a file name, save the current game to the file using pickle."""
-        with open(filename, "w") as f:
-            p = pickle.Pickler(f)
-            p.dump(self)
-
-    def loadGame(self, filename):
-        """Given a file name, load and return the object stored in the file."""
-        with open(filename, "r") as f:
-            u = pickle.Unpickler(f)
-            dObj = u.load()
-        return dObj
+        """ Return true if game is over, false otherwise """
+        p1done = self.P1Cups == [0] * self.NCUPS
+        p2done = self.P2Cups == [0] * self.NCUPS
+        return p1done or p2done
 
 
 #### Unit Tests
 class TestMancala(unittest.TestCase):
-    def test_legalmoves_emptyboard(self):
+    def test_legalMoves_fullBoard(self):
         m = MancalaBoard()
         self.assertEqual(m.legalMoves(1), range(1,7))
         self.assertEqual(m.legalMoves(2), range(1,7))
+
+    def test_legalMoves_emptyBoard(self):
+        m = MancalaBoard()
+        m.P1Cups = [0] * m.NCUPS
+        m.P2Cups = [0] * m.NCUPS
+        self.assertEqual(m.legalMoves(1), [])
+        self.assertEqual(m.legalMoves(2), [])
+
+    def test_gameOver(self):
+        m = MancalaBoard()
+        m.P1Cups = [0] * m.NCUPS
+        m.P2Cups = [0] * m.NCUPS
+        self.assertTrue(m.gameOver())
+
+    def test_not_gameOver(self):
+        m = MancalaBoard()
+        self.assertFalse(m.gameOver())
+
+    def test_makeMove_disallowWrongPlayer(self):
+        m = MancalaBoard()
+        self.assertFalse(m.makeMove(2, 1))
+
+    def test_makeMove_1(self):
+        """Play cup 3 on initial board"""
+        m = MancalaBoard()
+        m.makeMove(1, 3)
+        self.assertEqual(m.P1Cups, [4,4,0,5,5,5])
+        self.assertEqual(m.P2Cups, [4,4,4,4,4,4])
+        self.assertEqual(m.turn, 1)
+        self.assertEqual(m.scoreCups[0], 1)
+        self.assertEqual(m.scoreCups[1], 0)
+        self.assertEqual(m.legalMoves(1), [1,2,4,5,6])
 
 if __name__ == '__main__':
     unittest.main()

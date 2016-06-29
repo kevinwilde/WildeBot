@@ -1,11 +1,6 @@
-# Defines a simple artificially intelligent player agent
-
 from random import *
 from decimal import *
 from copy import *
-
-# a constant
-INFINITY = 1.0e400
 
 class Player(object):
     """ A basic AI (or human) player """
@@ -31,7 +26,7 @@ class Player(object):
     def minimaxMove(self, board, ply):
         """ Choose the best minimax move.  Returns (score, move) """
         move = -1
-        score = -INFINITY
+        score = -float('inf')
         turn = self
         for m in board.legalMoves(self.num):
             #for each legal move
@@ -59,7 +54,7 @@ class Player(object):
         at a given board configuation. Returns score."""
         if board.gameOver():
             return turn.score(board)
-        score = -INFINITY
+        score = -float('inf')
         for m in board.legalMoves(self.num):
             if ply == 0:
                 #print "turn.score(board) in max value is: " + str(turn.score(board))
@@ -80,7 +75,7 @@ class Player(object):
             at a given board configuation. Returns score."""
         if board.gameOver():
             return turn.score(board)
-        score = INFINITY
+        score = float('inf')
         for m in board.legalMoves(self.num):
             if ply == 0:
                 #print "turn.score(board) in min Value is: " + str(turn.score(board))
@@ -109,22 +104,12 @@ class Player(object):
         else:
             return 50.0
 
-    # You should not modify anything before this point.
-    # The code you will add to this file appears below this line.
 
-    # You will write this function (and any helpers you need)
-    # You should write the function here in its simplest form:
-    #   1. Use ply to determine when to stop (when ply == 0)
-    #   2. Search the moves in the order they are returned from the board's
-    #       legalMoves function.
-    # However, for your custom player, you may copy this function
-    # and modify it so that it uses a different termination condition
-    # and/or a different move search order.
     def alphaBetaMove(self, board, ply):
         """ Choose a move with alpha beta pruning.  Returns (score, move) """
         """ Choose the best minimax move.  Returns (score, move) """
         move = -1
-        score = -INFINITY
+        score = -float('inf')
         turn = self
         for m in board.legalMoves(self.num):
             #for each legal move
@@ -138,7 +123,7 @@ class Player(object):
             nb.makeMove(self.num, m)
             #try the move
             opp = Player(self.opp, self.type, self.ply)
-            s = opp.minValueAlphaBeta(nb, ply-1, turn, -INFINITY, INFINITY)
+            s = opp.minValueAlphaBeta(nb, ply-1, turn, -float('inf'), float('inf'))
             #and see what the opponent would do next
             if s > score:
                 #if the result is better than our best score so far, save that move,score
@@ -152,7 +137,7 @@ class Player(object):
         at a given board configuation. Returns score."""
         if board.gameOver():
             return turn.score(board)
-        score = -INFINITY
+        score = -float('inf')
         for m in board.legalMoves(self.num):
             if ply == 0:
                 #print "turn.score(board) in max value is: " + str(turn.score(board))
@@ -176,7 +161,7 @@ class Player(object):
             at a given board configuation. Returns score."""
         if board.gameOver():
             return turn.score(board)
-        score = INFINITY
+        score = float('inf')
         for m in board.legalMoves(self.num):
             if ply == 0:
                 #print "turn.score(board) in min Value is: " + str(turn.score(board))
