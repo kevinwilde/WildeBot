@@ -3,8 +3,6 @@ import json
 import requests
 
 from globalvars import *
-# import bayesbest
-# import classdata
 from games.Mancala import *
 from games.Player import *
 from games.TicTacToe import *
@@ -62,8 +60,7 @@ def handle_messages():
 
 def messaging_events(payload):
     """Generate tuples of (sender_id, message_text) from the
-    provided payload.
-    """
+    provided payload."""
     data = json.loads(payload)
     messaging_events = data["entry"][0]["messaging"]
     for event in messaging_events:
@@ -74,9 +71,7 @@ def messaging_events(payload):
 
 
 def send_message(token, recipient, text):
-    """Send the message text to recipient with id recipient.
-    """
-
+    """Send the message text to recipient with id recipient."""
     r = requests.post("https://graph.facebook.com/v2.6/me/messages",
         params={"access_token": token},
         data=json.dumps({
@@ -87,17 +82,44 @@ def send_message(token, recipient, text):
     if r.status_code != requests.codes.ok:
         print r.text
 
+def create_persistent_menu():
+    """Create Persistent Menu"""
+    r = requests.post("https://graph.facebook.com/v2.6/me/thread_settings",
+        params={"access_token": token},
+        data=json.dumps({
+          "setting_type" : "call_to_actions",
+          "thread_state" : "existing_thread",
+          "call_to_actions": [
+            {
+              "type": "postback",
+              "title": "Play Mancala",
+              "payload": "Mancala new"
+            },
+            {
+              "type": "postback",
+              "title": "Play TicTacToe",
+              "payload": "TTT new"
+            },
+            {
+              "type": "web_url",
+              "title": "View Website",
+              "url": "https://kevinwilde.github.io/"
+            }
+          ]
+        }),
+        headers={'Content-type': 'application/json'})
+    if r.status_code != requests.codes.ok:
+        print r.text
+
 
 def is_greeting(word):
-    """Determines if word is a greeting
-    """
+    """Determines if word is a greeting"""
     greetings = ["hi", "hello", "hey"]
     return word.lower() in greetings
 
 
 def host_ttt_game(sender, tokens):
-    """Tic Tac Toe game hosted on server
-    """
+    """Tic Tac Toe game hosted on server"""
     if tokens[1].lower() == "new":
         t = TTTBoard()
         send_message(PAT, sender, str(t) + "\nYou go first")
@@ -144,8 +166,7 @@ def host_ttt_game(sender, tokens):
 
 
 def host_mancala_game(sender, tokens):
-    """Mancala game hosted on server
-    """
+    """Mancala game hosted on server"""
     if tokens[1].lower() == "new":
         m = MancalaBoard()
         send_message(PAT, sender, str(m) + "\nYou go first")
@@ -195,8 +216,7 @@ def host_mancala_game(sender, tokens):
 def react(score):
     """Return string based on score
     Positive scores get more positive reactions
-    Negative scores get more negative reactions
-    """
+    Negative scores get more negative reactions"""
     reactions = [
         "I don't ever want to hear from you again", #0
         "You actually suck", #1
@@ -237,4 +257,5 @@ def react(score):
         return reactions[11]
 
 if __name__ == '__main__':
+    create_persistent_menu()
     app.run(debug=True)
