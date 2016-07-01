@@ -1,13 +1,12 @@
 import unittest
 from Game import *
-from Player import *
 
 class TTTBoard(Game):
     def __init__(self):
         """ Initializes the data members."""
         self.reset()
         
-    def reset( self ):
+    def reset(self):
         """ Reset the board for a new game """
         self.SIZE = 3
         self.board = [' ']*(self.SIZE*self.SIZE)
@@ -22,19 +21,22 @@ class TTTBoard(Game):
                 ret += str(i+1)
             else:
                 ret += self.board[i]
+
             if (i+1) % 3 == 0:
-                ret += "\n"
+                if (i+1) != len(self.board):
+                    ret += "\n" + "-"*9 + "\n"
             else:
-                ret += " "
+                ret += " | "
+        
         ret += "\n"
         return ret
 
-    def legalMove( self, playerNum, move ):
+    def legal_move(self, playerNum, move):
         """Returns true or false, whether the move is legal for the
         player."""
-        return move in self.legalMoves(playerNum)
+        return move in self.legal_moves(playerNum)
 
-    def legalMoves( self, playerNum ):
+    def legal_moves(self, playerNum):
         """ Returns the legal moves remianing for the player in question"""
         moves = []
         for m in range(len(self.board)):
@@ -42,7 +44,7 @@ class TTTBoard(Game):
                 moves.append(m+1)
         return moves
 
-    def makeMove( self, playerNum, pos ):
+    def make_move(self, playerNum, pos):
         """ Make a move for player in pos. """
         move = pos - 1
         
@@ -55,21 +57,21 @@ class TTTBoard(Game):
         if playerNum == 1:
             self.board[move] = 'X'
         elif playerNum == 2:
-            self.board[move] = 'O'
+            self.board[move] = '0'
         else:
             print playerNum
             raise ValueError("playerNum must be 1 or 2")
         self.turn = 2 - playerNum + 1
         return True
     
-    def rowWin( self, c ):
+    def row_win(self, c):
         """ Has the player playing char c won in a row?"""
         for i in range(self.SIZE):
             if self.board[i*self.SIZE:(i+1)*self.SIZE] == [c]*self.SIZE:
                 return True
         return False
     
-    def colWin( self, c):
+    def col_win(self, c):
         """ Has the player playing char c won in a column?"""
         for i in range(self.SIZE):
             col = []
@@ -79,7 +81,7 @@ class TTTBoard(Game):
                     return True
         return False
     
-    def diagWin( self, c ):
+    def diag_win(self, c):
         """ Has the player playing char c won in a diagonal?"""
         diag = []
         offdiag = []
@@ -90,23 +92,23 @@ class TTTBoard(Game):
                 return True
         return False
     
-    def hasWonPlayer( self, c ):
+    def has_won_player(self, c):
         """ Has the player playing c won?"""
-        return self.rowWin(c) or self.colWin(c) or self.diagWin(c)
+        return self.row_win(c) or self.col_win(c) or self.diag_win(c)
     
-    def hasWon( self, playerNum ):
-        """ Returns who has won: X, O, or None"""
+    def has_won(self, playerNum):
+        """ Returns who has won: X, 0, or None"""
         if playerNum == 1:
-            return self.hasWonPlayer( "X" )
+            return self.has_won_player('X')
         elif playerNum == 2:
-            return self.hasWonPlayer( "O" )
+            return self.has_won_player('0')
         else:
             print playerNum
             raise ValueError("playerNum must be 1 or 2")
 
-    def gameOver(self):
+    def game_over(self):
         """ Returns True if the game is over, and false if not"""
-        if self.hasWonPlayer("X") or self.hasWonPlayer("O"):
+        if self.has_won_player('X') or self.has_won_player('0'):
             return True
         else:
             for move in self.board:
@@ -117,94 +119,94 @@ class TTTBoard(Game):
 
 #### Unit Tests
 class TestTTT(unittest.TestCase):
-    def test_legalmoves_emptyboard(self):
+    def test_legal_moves_emptyboard(self):
         t = TTTBoard()
-        self.assertEqual(t.legalMoves(1), range(1,10))
-        self.assertEqual(t.legalMoves(2), range(1,10))
+        self.assertEqual(t.legal_moves(1), range(1,10))
+        self.assertEqual(t.legal_moves(2), range(1,10))
 
-    def test_legalmoves_fullboard(self):
+    def test_legal_moves_fullboard(self):
         t = TTTBoard()
         for i in range(1,10):
-            self.assertTrue(t.makeMove(t.turn, i))
-        self.assertEqual(t.legalMoves(1), [])
-        self.assertEqual(t.legalMoves(2), [])
+            self.assertTrue(t.make_move(t.turn, i))
+        self.assertEqual(t.legal_moves(1), [])
+        self.assertEqual(t.legal_moves(2), [])
 
-    def test_legalmoves_partialboard(self):
+    def test_legal_moves_partialboard(self):
         t = TTTBoard()
-        self.assertTrue(t.makeMove(1, 1))
-        self.assertTrue(t.makeMove(2, 2))
-        self.assertTrue(t.makeMove(1, 3))
-        self.assertTrue(t.makeMove(2, 7))
-        self.assertTrue(t.makeMove(1, 9))
-        self.assertEqual(t.legalMoves(1), [4, 5, 6, 8])
-        self.assertEqual(t.legalMoves(2), [4, 5, 6, 8])
+        self.assertTrue(t.make_move(1, 1))
+        self.assertTrue(t.make_move(2, 2))
+        self.assertTrue(t.make_move(1, 3))
+        self.assertTrue(t.make_move(2, 7))
+        self.assertTrue(t.make_move(1, 9))
+        self.assertEqual(t.legal_moves(1), [4, 5, 6, 8])
+        self.assertEqual(t.legal_moves(2), [4, 5, 6, 8])
 
     def test_disallow_illegal_move(self):
         t = TTTBoard()
-        self.assertTrue(t.makeMove(1, 1))
-        self.assertFalse(t.makeMove(2, 1))
+        self.assertTrue(t.make_move(1, 1))
+        self.assertFalse(t.make_move(2, 1))
 
     def test_disallow_when_wrong_turn(self):
         t = TTTBoard()
-        self.assertTrue(t.makeMove(1, 1))
-        self.assertFalse(t.makeMove(1, 2))
+        self.assertTrue(t.make_move(1, 1))
+        self.assertFalse(t.make_move(1, 2))
 
-    def test_row_win(self):
+    def test_row__win(self):
         t = TTTBoard()
-        t.makeMove(1, 1)
-        t.makeMove(2, 4)
-        t.makeMove(1, 2)
-        t.makeMove(2, 5)
-        t.makeMove(1, 3)
-        self.assertTrue(t.gameOver())
-        self.assertTrue(t.hasWon(1))
+        t.make_move(1, 1)
+        t.make_move(2, 4)
+        t.make_move(1, 2)
+        t.make_move(2, 5)
+        t.make_move(1, 3)
+        self.assertTrue(t.game_over())
+        self.assertTrue(t.has_won(1))
 
-    def test_col_win(self):
+    def test_col__win(self):
         t = TTTBoard()
-        t.makeMove(1, 2)
-        t.makeMove(2, 1)
-        t.makeMove(1, 5)
-        t.makeMove(2, 4)
-        t.makeMove(1, 3)
-        t.makeMove(2, 7)
-        self.assertTrue(t.gameOver())
-        self.assertTrue(t.hasWon(2))
+        t.make_move(1, 2)
+        t.make_move(2, 1)
+        t.make_move(1, 5)
+        t.make_move(2, 4)
+        t.make_move(1, 3)
+        t.make_move(2, 7)
+        self.assertTrue(t.game_over())
+        self.assertTrue(t.has_won(2))
 
     def test_diag_win_1(self):
         t = TTTBoard()
-        t.makeMove(1, 1)
-        t.makeMove(2, 2)
-        t.makeMove(1, 5)
-        t.makeMove(2, 6)
-        t.makeMove(1, 9)
-        self.assertTrue(t.gameOver())
-        self.assertTrue(t.hasWon(1))
+        t.make_move(1, 1)
+        t.make_move(2, 2)
+        t.make_move(1, 5)
+        t.make_move(2, 6)
+        t.make_move(1, 9)
+        self.assertTrue(t.game_over())
+        self.assertTrue(t.has_won(1))
 
     def test_diag_win_2(self):
         t = TTTBoard()
-        t.makeMove(1, 1)
-        t.makeMove(2, 3)
-        t.makeMove(1, 2)
-        t.makeMove(2, 5)
-        t.makeMove(1, 9)
-        t.makeMove(2, 7)
-        self.assertTrue(t.gameOver())
-        self.assertTrue(t.hasWon(2))
+        t.make_move(1, 1)
+        t.make_move(2, 3)
+        t.make_move(1, 2)
+        t.make_move(2, 5)
+        t.make_move(1, 9)
+        t.make_move(2, 7)
+        self.assertTrue(t.game_over())
+        self.assertTrue(t.has_won(2))
 
     def test_cats_game(self):
         t = TTTBoard()
-        self.assertTrue(t.makeMove(1, 5))
-        self.assertTrue(t.makeMove(2, 1))
-        self.assertTrue(t.makeMove(1, 3))
-        self.assertTrue(t.makeMove(2, 7))
-        self.assertTrue(t.makeMove(1, 4))
-        self.assertTrue(t.makeMove(2, 6))
-        self.assertTrue(t.makeMove(1, 2))
-        self.assertTrue(t.makeMove(2, 8))
-        self.assertTrue(t.makeMove(1, 9))
-        self.assertTrue(t.gameOver())
-        self.assertFalse(t.hasWon(1))
-        self.assertFalse(t.hasWon(2))
+        self.assertTrue(t.make_move(1, 5))
+        self.assertTrue(t.make_move(2, 1))
+        self.assertTrue(t.make_move(1, 3))
+        self.assertTrue(t.make_move(2, 7))
+        self.assertTrue(t.make_move(1, 4))
+        self.assertTrue(t.make_move(2, 6))
+        self.assertTrue(t.make_move(1, 2))
+        self.assertTrue(t.make_move(2, 8))
+        self.assertTrue(t.make_move(1, 9))
+        self.assertTrue(t.game_over())
+        self.assertFalse(t.has_won(1))
+        self.assertFalse(t.has_won(2))
         
 
 if __name__ == '__main__':

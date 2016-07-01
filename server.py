@@ -85,6 +85,7 @@ def send_message(token, recipient, text):
 
 def create_persistent_menu():
     """Create Persistent Menu"""
+    print "CALL CREATE_PERSISTENT_MENU"
     r = requests.post("https://graph.facebook.com/v2.6/me/thread_settings",
         params={"access_token": token},
         data=json.dumps({
@@ -124,21 +125,21 @@ def host_ttt_game(sender, tokens):
     if tokens[1].lower() == "new":
         t = TTTBoard()
         send_message(PAT, sender, str(t) + "\nYou go first")
-        t.saveGame(sender + TTT_EXTENSION)
+        t.save_game(sender + TTT_EXTENSION)
     else:
         try:
-            t = TTTBoard.loadGame(sender + TTT_EXTENSION)
+            t = TTTBoard.load_game(sender + TTT_EXTENSION)
             move = int(tokens[1])
-            if t.gameOver():
+            if t.game_over():
                 send_message(PAT, sender, "Game over\nStart new game with TTT new")
             elif t.turn != 1:
                 send_message(PAT, sender, "Not your turn yet")
-            elif t.legalMove(1, move):
-                t.makeMove(1, move)
+            elif t.legal_move(1, move):
+                t.make_move(1, move)
                 send_message(PAT, sender, str(t))
                 
-                if t.gameOver():
-                    if t.hasWon(1):
+                if t.game_over():
+                    if t.has_won(1):
                         send_message(PAT, sender, "You win!")
                     else:
                         send_message(PAT, sender, "Cat's game")
@@ -146,17 +147,17 @@ def host_ttt_game(sender, tokens):
                 # Bot responds
                 else:
                     player2 = Player(2, Player.ABPRUNE, ply=9)
-                    ab_move = player2.chooseMove(t)
-                    t.makeMove(2, ab_move)
+                    ab_move = player2.choose_move(t)
+                    t.make_move(2, ab_move)
                     send_message(PAT, sender, str(t))
                     
-                    if t.gameOver():
-                        if t.hasWon(2):
+                    if t.game_over():
+                        if t.has_won(2):
                             send_message(PAT, sender, "I win!")
                         else:
                             send_message(PAT, sender, "Cat's game")
                 
-                t.saveGame(sender + TTT_EXTENSION)
+                t.save_game(sender + TTT_EXTENSION)
             else:
                 send_message(PAT, sender, "Illegal move")
 
@@ -171,43 +172,43 @@ def host_mancala_game(sender, tokens):
     if tokens[1].lower() == "new":
         m = MancalaBoard()
         send_message(PAT, sender, str(m) + "\nYou go first")
-        m.saveGame(sender + MANCALA_EXTENSION)
+        m.save_game(sender + MANCALA_EXTENSION)
     else:
         try:
-            m = MancalaBoard.loadGame(sender + MANCALA_EXTENSION)
+            m = MancalaBoard.load_game(sender + MANCALA_EXTENSION)
             move = int(tokens[1])
-            if m.gameOver():
+            if m.game_over():
                 send_message(PAT, sender, "Game over\nStart new game with Mancala new")
             elif m.turn != 1:
                 send_message(PAT, sender, "Not your turn yet")
 
             else:
-                if m.legalMove(1, move):
-                    m.makeMove(1, move)
+                if m.legal_move(1, move):
+                    m.make_move(1, move)
                     send_message(PAT, sender, str(m))
                 else:
                     send_message(PAT, sender, "Illegal move")
 
             # Bot responds
-            while m.turn == 2  and not m.gameOver():
+            while m.turn == 2  and not m.game_over():
                 send_message(PAT, sender, "My turn")
                 player2 = Player(2, Player.CUSTOM, ply=9)
-                ab_move = player2.chooseMove(m)
+                ab_move = player2.choose_move(m)
                 send_message(PAT, sender, "I choose " + str(ab_move))
-                m.makeMove(2, ab_move)
+                m.make_move(2, ab_move)
                 send_message(PAT, sender, str(m))
 
             if m.turn == 1:
                 send_message(PAT, sender, "Your turn again")
-            elif m.gameOver():
-                if m.hasWon(1):
+            elif m.game_over():
+                if m.has_won(1):
                     send_message(PAT, sender, "You win!")
-                elif m.hasWon(2):
+                elif m.has_won(2):
                     send_message(PAT, sender, "I win!")
                 else:
                     send_message(PAT, sender, "Cat's game")
 
-            m.saveGame(sender + MANCALA_EXTENSION)
+            m.save_game(sender + MANCALA_EXTENSION)
 
         except Exception as e:
             print e

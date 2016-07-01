@@ -2,7 +2,6 @@ import unittest
 from random import *
 from copy import *
 from Game import *
-from Player import *
 
 class MancalaBoard(Game):
     def __init__(self):
@@ -30,26 +29,26 @@ class MancalaBoard(Game):
         return ret
 
         
-    def legalMove(self, playerNum, cup):
+    def legal_move(self, playernum, cup):
         """ Returns whether or not a given move is legal or not"""
-        if playerNum == 1:
+        if playernum == 1:
             cups = self.P1Cups
-        elif playerNum == 2:
+        elif playernum == 2:
             cups = self.P2Cups
         else:
-            print playerNum
-            raise ValueError("playerNum must be 1 or 2")
+            print playernum
+            raise ValueError("playernum must be 1 or 2")
         return cup > 0 and cup <= len(cups) and cups[cup-1] > 0
 
-    def legalMoves(self, playerNum):
+    def legal_moves(self, playernum):
         """ Returns a list of legal moves for the given player """
-        if playerNum == 1:
+        if playernum == 1:
             cups = self.P1Cups
-        elif playerNum == 2:
+        elif playernum == 2:
             cups = self.P2Cups
         else:
-            print playerNum
-            raise ValueError("playerNum must be 1 or 2")
+            print playernum
+            raise ValueError("playernum must be 1 or 2")
         moves = []
         for m in range(len(cups)):
             if cups[m] != 0:
@@ -57,11 +56,11 @@ class MancalaBoard(Game):
         return moves
 
 
-    def makeMove(self, playerNum, cup):
-        if playerNum != self.turn:
+    def make_move(self, playernum, cup):
+        if playernum != self.turn:
             return False
-        again = self.makeMoveHelp(playerNum, cup)
-        if self.gameOver():
+        again = self.make_move_help(playernum, cup)
+        if self.game_over():
             # clear out the cups
             for i in range(len(self.P1Cups)):
                 self.scoreCups[0] += self.P1Cups[i]
@@ -73,22 +72,22 @@ class MancalaBoard(Game):
             return False
         else:
             if not again:
-                self.turn = 2 - playerNum + 1
+                self.turn = 2 - playernum + 1
             return again
             
-    def makeMoveHelp(self, playerNum, cup):
+    def make_move_help(self, playernum, cup):
         """ Make a move for the given player.
             Returns True if the player gets another turn and False if not.
             Assumes a legal move"""
-        if playerNum == 1:
+        if playernum == 1:
             cups = self.P1Cups
             oppCups = self.P2Cups
-        elif playerNum == 2:
+        elif playernum == 2:
             cups = self.P2Cups
             oppCups = self.P1Cups
         else:
-            print playerNum
-            raise ValueError("playerNum must be 1 or 2")
+            print playernum
+            raise ValueError("playernum must be 1 or 2")
         initCups = cups
         nstones = cups[cup-1]  # Pick up the stones
         cups[cup-1] = 0        # Now the cup is empty
@@ -103,7 +102,7 @@ class MancalaBoard(Game):
             if nstones == 0:
                 break    # If no more stones, exit the loop
             if cups == initCups:   # If we're on our own side
-                self.scoreCups[playerNum-1] += 1
+                self.scoreCups[playernum-1] += 1
                 nstones = nstones - 1
                 playAgain = True
             # now switch sides and keep going
@@ -119,33 +118,33 @@ class MancalaBoard(Game):
         
         # Now see if we ended in a blank space on our side
         if cups == initCups and cups[cup-2] == 1:
-            self.scoreCups[playerNum-1] += oppCups[(self.NCUPS-cup)+1]
+            self.scoreCups[playernum-1] += oppCups[(self.NCUPS-cup)+1]
             oppCups[(self.NCUPS-cup)+1] = 0
             #added 2 lines so that when lands on own open cup, captures
             # opposite stones in addition to my own 1
-            self.scoreCups[playerNum-1] += 1
+            self.scoreCups[playernum-1] += 1
             cups[cup-2] = 0
         return False
 
-    def hasWon(self, playerNum):
+    def has_won(self, playernum):
         """ Returns whether or not the given player has won """
-        if self.gameOver():
-            opp = 2 - playerNum + 1
-            return self.scoreCups[playerNum-1] > self.scoreCups[opp-1]
+        if self.game_over():
+            opp = 2 - playernum + 1
+            return self.scoreCups[playernum-1] > self.scoreCups[opp-1]
         else:
             return False
 
-    def getPlayersCups(self, playerNum):
+    def get_players_cups(self, playernum):
         """ Return the cups for the given player """
-        if playerNum == 1:
+        if playernum == 1:
             return self.P1Cups
-        elif playerNum == 2:
+        elif playernum == 2:
             return self.P2Cups
         else:
-            print playerNum
-            raise ValueError("playerNum must be 1 or 2")
+            print playernum
+            raise ValueError("playernum must be 1 or 2")
         
-    def gameOver(self):
+    def game_over(self):
         """ Return true if game is over, false otherwise """
         p1done = self.P1Cups == [0] * self.NCUPS
         p2done = self.P2Cups == [0] * self.NCUPS
@@ -154,51 +153,51 @@ class MancalaBoard(Game):
 
 #### Unit Tests
 class TestMancala(unittest.TestCase):
-    def test_legalMoves_fullBoard(self):
+    def test_legal_moves_full_board(self):
         m = MancalaBoard()
-        self.assertEqual(m.legalMoves(1), range(1,7))
-        self.assertEqual(m.legalMoves(2), range(1,7))
+        self.assertEqual(m.legal_moves(1), range(1,7))
+        self.assertEqual(m.legal_moves(2), range(1,7))
 
-    def test_legalMoves_emptyBoard(self):
-        m = MancalaBoard()
-        m.P1Cups = [0] * m.NCUPS
-        m.P2Cups = [0] * m.NCUPS
-        self.assertEqual(m.legalMoves(1), [])
-        self.assertEqual(m.legalMoves(2), [])
-
-    def test_gameOver(self):
+    def test_legal_moves_empty_board(self):
         m = MancalaBoard()
         m.P1Cups = [0] * m.NCUPS
         m.P2Cups = [0] * m.NCUPS
-        self.assertTrue(m.gameOver())
+        self.assertEqual(m.legal_moves(1), [])
+        self.assertEqual(m.legal_moves(2), [])
 
-    def test_not_gameOver(self):
+    def test_game_over(self):
         m = MancalaBoard()
-        self.assertFalse(m.gameOver())
+        m.P1Cups = [0] * m.NCUPS
+        m.P2Cups = [0] * m.NCUPS
+        self.assertTrue(m.game_over())
 
-    def test_makeMove_disallowWrongPlayer(self):
+    def test_not_game_over(self):
         m = MancalaBoard()
-        self.assertFalse(m.makeMove(2, 1))
+        self.assertFalse(m.game_over())
 
-    def test_makeMove_1(self):
+    def test_make_move_disallow_wrong_player(self):
+        m = MancalaBoard()
+        self.assertFalse(m.make_move(2, 1))
+
+    def test_make_move_1(self):
         """Play cup 3 on initial board"""
         m = MancalaBoard()
-        m.makeMove(1, 3)
+        m.make_move(1, 3)
         self.assertEqual(m.P1Cups, [4,4,0,5,5,5])
         self.assertEqual(m.P2Cups, [4,4,4,4,4,4])
         self.assertEqual(m.turn, 1)
         self.assertEqual(m.scoreCups[0], 1)
         self.assertEqual(m.scoreCups[1], 0)
-        self.assertEqual(m.legalMoves(1), [1,2,4,5,6])
+        self.assertEqual(m.legal_moves(1), [1,2,4,5,6])
 
     def test_clearBoardAtEnd(self):
         m = MancalaBoard()
         m.P1Cups = [0,0,0,0,0,1]
         m.scoreCups = [23, 0]
-        m.makeMove(1, 6)
+        m.make_move(1, 6)
         self.assertEqual(m.P1Cups, [0] * m.NCUPS)
         self.assertEqual(m.P2Cups, [0] * m.NCUPS)
-        self.assertTrue(m.gameOver())
+        self.assertTrue(m.game_over())
 
 if __name__ == '__main__':
     unittest.main()
