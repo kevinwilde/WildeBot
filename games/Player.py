@@ -253,8 +253,8 @@ class kjw731(Player):
         ourTotalPebbles = 0
         oppTotalPebbles = 0
 
-        myCups = board.getPlayersCups(self.num)
-        oppCups = board.getPlayersCups(self.opp)
+        myCups = board.get_players_cups(self.num)
+        oppCups = board.get_players_cups(self.opp)
 
         for n in range(board.NCUPS):
             ourTotalPebbles += myCups[n] # total number of pebbles on our side
@@ -308,8 +308,8 @@ class kjw731_Alt(Player):
         canCapture = 0
         indexWhereStonesCanLand = []
 
-        myCups = board.getPlayersCups(self.num)
-        oppCups = board.getPlayersCups(self.opp)
+        myCups = board.get_players_cups(self.num)
+        oppCups = board.get_players_cups(self.opp)
 
         for n in range(board.NCUPS):
             indexWhereStonesCanLand.append(n+myCups[n])
