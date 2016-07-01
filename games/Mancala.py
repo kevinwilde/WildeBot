@@ -6,11 +6,11 @@ from Player import *
 
 class MancalaBoard(Game):
     def __init__(self):
-        """ Initilize a game board for the game of mancala"""
+        """ Initialize a game board for the game of mancala"""
         self.reset()
         
     def reset(self):
-        """ Reselt the mancala board for a new game"""
+        """ Reset the mancala board for a new game"""
         self.NCUPS = 6       # Cups per side
         self.scoreCups = [0, 0]
         self.P1Cups = [4]*self.NCUPS
@@ -30,7 +30,7 @@ class MancalaBoard(Game):
         return ret
 
         
-    def legalMove( self, playerNum, cup ):
+    def legalMove(self, playerNum, cup):
         """ Returns whether or not a given move is legal or not"""
         if playerNum == 1:
             cups = self.P1Cups
@@ -41,7 +41,7 @@ class MancalaBoard(Game):
             raise ValueError("playerNum must be 1 or 2")
         return cup > 0 and cup <= len(cups) and cups[cup-1] > 0
 
-    def legalMoves( self, playerNum ):
+    def legalMoves(self, playerNum):
         """ Returns a list of legal moves for the given player """
         if playerNum == 1:
             cups = self.P1Cups
@@ -57,7 +57,7 @@ class MancalaBoard(Game):
         return moves
 
 
-    def makeMove( self, playerNum, cup ):
+    def makeMove(self, playerNum, cup):
         if playerNum != self.turn:
             return False
         again = self.makeMoveHelp(playerNum, cup)
@@ -76,7 +76,7 @@ class MancalaBoard(Game):
                 self.turn = 2 - playerNum + 1
             return again
             
-    def makeMoveHelp( self, playerNum, cup ):
+    def makeMoveHelp(self, playerNum, cup):
         """ Make a move for the given player.
             Returns True if the player gets another turn and False if not.
             Assumes a legal move"""
@@ -127,7 +127,7 @@ class MancalaBoard(Game):
             cups[cup-2] = 0
         return False
 
-    def hasWon( self, playerNum ):
+    def hasWon(self, playerNum):
         """ Returns whether or not the given player has won """
         if self.gameOver():
             opp = 2 - playerNum + 1
@@ -135,7 +135,7 @@ class MancalaBoard(Game):
         else:
             return False
 
-    def getPlayersCups( self, playerNum ):
+    def getPlayersCups(self, playerNum):
         """ Return the cups for the given player """
         if playerNum == 1:
             return self.P1Cups
@@ -190,6 +190,15 @@ class TestMancala(unittest.TestCase):
         self.assertEqual(m.scoreCups[0], 1)
         self.assertEqual(m.scoreCups[1], 0)
         self.assertEqual(m.legalMoves(1), [1,2,4,5,6])
+
+    def test_clearBoardAtEnd(self):
+        m = MancalaBoard()
+        m.P1Cups = [0,0,0,0,0,1]
+        m.scoreCups = [23, 0]
+        m.makeMove(1, 6)
+        self.assertEqual(m.P1Cups, [0] * m.NCUPS)
+        self.assertEqual(m.P2Cups, [0] * m.NCUPS)
+        self.assertTrue(m.gameOver())
 
 if __name__ == '__main__':
     unittest.main()
