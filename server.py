@@ -16,7 +16,6 @@ def handle_verification():
     print "Handling Verification: ->"
     if request.args.get('hub.verify_token', '') == PASSWORD:
         print "Verification successful!"
-        create_persistent_menu()
         return request.args.get('hub.challenge', '')
     else:
         print "Verification failed!"
@@ -259,4 +258,5 @@ def react(score):
         return reactions[11]
 
 if __name__ == '__main__':
+    create_persistent_menu()
     app.run(debug=True)
