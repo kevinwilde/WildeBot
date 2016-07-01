@@ -258,5 +258,6 @@ def react(score):
         return reactions[11]
 
 if __name__ == '__main__':
-    create_persistent_menu()
     app.run(debug=True)
+    print "HERE HERE"
+    create_persistent_menu()
