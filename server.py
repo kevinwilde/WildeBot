@@ -82,7 +82,7 @@ def send_message(token, recipient, text):
     if r.status_code != requests.codes.ok:
         print r.text
 
-def create_persistent_menu():
+def create_persistent_menu(token):
     """Create Persistent Menu"""
     print "CALL CREATE_PERSISTENT_MENU"
     r = requests.post("https://graph.facebook.com/v2.6/me/thread_settings",
@@ -104,7 +104,7 @@ def create_persistent_menu():
             {
               "type": "web_url",
               "title": "View Website",
-              "url": "https://kevinwilde.github.io/"
+              "url": "https://www.facebook.com/kevinwildebot"
             }
           ]
         }),
@@ -257,7 +257,8 @@ def react(score):
     else:
         return reactions[11]
 
+
+create_persistent_menu(PAT)
+
 if __name__ == '__main__':
     app.run(debug=True)
-    print "HERE HERE"
-    create_persistent_menu()
