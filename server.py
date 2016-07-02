@@ -1,5 +1,5 @@
 from flask import Flask, request
-import json, requests
+import json
 
 import bot, setup
 

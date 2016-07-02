@@ -1,3 +1,5 @@
+import requests
+
 def create_persistent_menu(token):
     """Create Persistent Menu"""
     print "Call create_persistent_menu"

@@ -41,8 +41,11 @@ class Bot(object):
 
         return "ok"
 
-    def send_message(self):
-        pass
+    def send_message(self, recipient, text, attachment=None):
+        if attachment is not None:
+            pass
+        else:
+            self.send_text_message(recipient, text)
 
     def send_text_message(self, recipient, text):
         """Send the message text to recipient with id recipient."""
