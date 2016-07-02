@@ -28,11 +28,11 @@ class Bot(object):
 
         # Tic Tac Toe
         elif len(tokens) > 1 and tokens[0].lower() =="ttt":
-            host_ttt_game(sender, tokens)
+            self.host_ttt_game(sender, tokens)
 
         # Mancala
         elif len(tokens) > 1 and tokens[0].lower() =="mancala":
-            host_mancala_game(sender, tokens)
+            self.host_mancala_game(sender, tokens)
 
         # Bayes
         else:
