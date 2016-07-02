@@ -1,7 +1,7 @@
 import json, requests
 
 import bayesbest
-from games import *
+import games
 
 class Bot(object):
     def __init__(self, token):
@@ -105,12 +105,12 @@ class Bot(object):
     def host_ttt_game(self, sender, tokens):
         """Tic Tac Toe game hosted on server"""
         if tokens[1].lower() == "new":
-            t = TicTacToe.TTTBoard()
+            t = games.TicTacToe.TTTBoard()
             send_message(self.token, sender, str(t) + "\nYou go first")
             t.save_game(sender + self.ttt_extension)
         else:
             try:
-                t = TicTacToe.TTTBoard.load_game(sender + self.ttt_extension)
+                t = games.TicTacToe.TTTBoard.load_game(sender + self.ttt_extension)
                 move = int(tokens[1])
                 if t.game_over():
                     send_message(self.token, sender, "Game over\nStart new game with TTT new")
@@ -152,12 +152,12 @@ class Bot(object):
     def host_mancala_game(self, sender, tokens):
         """Mancala game hosted on server"""
         if tokens[1].lower() == "new":
-            m = Mancala.MancalaBoard()
+            m = games.Mancala.MancalaBoard()
             send_message(self.token, sender, str(m) + "\nYou go first")
             m.save_game(sender + self.mancala_extension)
         else:
             try:
-                m = Mancala.MancalaBoard.load_game(sender + self.mancala_extension)
+                m = games.Mancala.MancalaBoard.load_game(sender + self.mancala_extension)
                 move = int(tokens[1])
                 if m.game_over():
                     send_message(self.token, sender, "Game over\nStart new game with Mancala new")
