@@ -10,10 +10,8 @@ PAT = '***REMOVED***'
 PASSWORD = '***REMOVED***'
 
 setup.create_persistent_menu(PAT)
-mr_bot = create_bot(PAT)
+mr_bot = bot.Bot(PAT)
 
-def create_bot(token):
-    return bot.Bot(token) 
 
 @app.route('/', methods=['GET'])
 def handle_verification():
