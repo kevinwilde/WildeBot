@@ -128,7 +128,7 @@ class Bot(object):
 
                     # Bot responds
                     else:
-                        player2 = Player.Player(2, Player.ABPRUNE, ply=9)
+                        player2 = games.Player.Player(2, Player.ABPRUNE, ply=9)
                         ab_move = player2.choose_move(t)
                         t.make_move(2, ab_move)
                         self.send_message(sender, str(t))
@@ -174,7 +174,7 @@ class Bot(object):
                 # Bot responds
                 while m.turn == 2  and not m.game_over():
                     self.send_message(sender, "My turn")
-                    player2 = Player.Player(2, Player.CUSTOM, ply=9)
+                    player2 = games.Player.Player(2, Player.CUSTOM, ply=9)
                     ab_move = player2.choose_move(m)
                     self.send_message(sender, "I choose " + str(ab_move))
                     m.make_move(2, ab_move)
