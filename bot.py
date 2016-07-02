@@ -199,7 +199,7 @@ class Bot(object):
 
 
 
-def is_greeting(self, word):
+def is_greeting(word):
     """Determines if word is a greeting"""
     greetings = ["hi", "hello", "hey"]
     return word.lower() in greetings
