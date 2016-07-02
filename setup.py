@@ -1,4 +1,4 @@
-import requests
+import json, requests
 
 def create_persistent_menu(token):
     """Create Persistent Menu"""
