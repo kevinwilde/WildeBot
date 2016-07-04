@@ -1,16 +1,19 @@
-import json, requests
+import json
+import requests
 
 import bayes
 import games
 
 class Bot(object):
+
     def __init__(self, token):
         self.token = token
-        self.bayes_classifier = bayes.bayesbest.Bayes_Classifier()
+        self.bayes_classifier = bayes.bayesbest.BayesClassifier()
         self.ttt_extension = "TTTGame.pickle"
         self.mancala_extension = "MancGame.pickle"
 
     def act_on_message(self, sender, message):
+        """Determine how to respond to message"""
         tokens = self.bayes_classifier.tokenize(message)
 
         # Greeting
@@ -62,7 +65,8 @@ class Bot(object):
     def react(self, score):
         """Return string based on score
         Positive scores get more positive reactions
-        Negative scores get more negative reactions"""
+        Negative scores get more negative reactions
+        """
         reactions = [
             "I don't ever want to hear from you again", #0
             "You actually suck", #1

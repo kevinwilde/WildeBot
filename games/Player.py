@@ -1,9 +1,10 @@
-from random import *
+import copy
+import random
 from decimal import *
-from copy import *
 
 class Player(object):
-    """ A basic AI (or human) player """
+    """A basic AI (or human) player."""
+
     HUMAN = 0
     RANDOM = 1
     MINIMAX = 2
@@ -12,8 +13,9 @@ class Player(object):
     CUSTOM_ALT = 5
     
     def __init__(self, playerNum, playerType, ply=0):
-        """Initialize a Player with a playerNum (1 or 2), playerType (one of
-        the constants such as HUMAN), and a ply (default is 0)."""
+        """Initialize a Player with a playerNum (1 or 2), playerType
+        (one of the constants such as HUMAN), and a ply (default is 0).
+        """
         self.num = playerNum
         self.opp = 2 - playerNum + 1
         self.type = playerType
@@ -24,7 +26,7 @@ class Player(object):
         return str(self.num)
         
     def minimax_move(self, board, ply):
-        """ Choose the best minimax move.  Returns (score, move) """
+        """Choose the best minimax move.  Return (score, move)."""
         move = -1
         score = -float('inf')
         turn = self
@@ -35,7 +37,7 @@ class Player(object):
                 return (self.score(board), m)
             if board.game_over():
                 return (-1, -1)  # Can't make a move, the game is over
-            nb = deepcopy(board)
+            nb = copy.deepcopy(board)
             #make a new board
             nb.make_move(self.num, m)
             #try the move
@@ -50,8 +52,9 @@ class Player(object):
         return score, move
 
     def max_value(self, board, ply, turn):
-        """ Find the minimax value for the next move for this player
-        at a given board configuation. Returns score."""
+        """Find the minimax value for the next move for this player at
+        a given board configuation. Return score.
+        """
         if board.game_over():
             return turn.score(board)
         score = -float('inf')
@@ -62,7 +65,7 @@ class Player(object):
             # make a new player to play the other side
             opponent = Player(self.opp, self.type, self.ply)
             # Copy the board so that we don't ruin it
-            nextBoard = deepcopy(board)
+            nextBoard = copy.deepcopy(board)
             nextBoard.make_move(self.num, m)
             s = opponent.min_value(nextBoard, ply-1, turn)
             #print "s in max_value is: " + str(s)
@@ -71,8 +74,9 @@ class Player(object):
         return score
     
     def min_value(self, board, ply, turn):
-        """ Find the minimax value for the next move for this player
-            at a given board configuation. Returns score."""
+        """Find the minimax value for the next move for this player at
+        a given board configuation. Return score.
+        """
         if board.game_over():
             return turn.score(board)
         score = float('inf')
@@ -83,7 +87,7 @@ class Player(object):
             # make a new player to play the other side
             opponent = Player(self.opp, self.type, self.ply)
             # Copy the board so that we don't ruin it
-            nextBoard = deepcopy(board)
+            nextBoard = copy.deepcopy(board)
             nextBoard.make_move(self.num, m)
             s = opponent.max_value(nextBoard, ply-1, turn)
             #print "s in min_value is: " + str(s)
@@ -106,8 +110,8 @@ class Player(object):
 
 
     def alphabeta_move(self, board, ply):
-        """ Choose a move with alpha beta pruning.  Returns (score, move) """
-        """ Choose the best minimax move.  Returns (score, move) """
+        """Choose a move with alpha beta pruning. Return (score, move).
+        """
         move = -1
         score = -float('inf')
         turn = self
@@ -118,7 +122,7 @@ class Player(object):
                 return (self.score(board), m)
             if board.game_over():
                 return (-1, -1)  # Can't make a move, the game is over
-            nb = deepcopy(board)
+            nb = copy.deepcopy(board)
             #make a new board
             nb.make_move(self.num, m)
             #try the move
@@ -133,8 +137,9 @@ class Player(object):
         return score, move
 
     def max_value_alphabeta(self, board, ply, turn, alpha, beta):
-        """ Find the minimax value for the next move for this player
-        at a given board configuation. Returns score."""
+        """Find the minimax value for the next move for this player at
+        a given board configuation. Return score.
+        """
         if board.game_over():
             return turn.score(board)
         score = -float('inf')
@@ -145,7 +150,7 @@ class Player(object):
             # make a new player to play the other side
             opponent = Player(self.opp, self.type, self.ply)
             # Copy the board so that we don't ruin it
-            nextBoard = deepcopy(board)
+            nextBoard = copy.deepcopy(board)
             nextBoard.make_move(self.num, m)
             s = opponent.min_value_alphabeta(nextBoard, ply-1, turn, alpha, beta)
             #print "s in max_value is: " + str(s)
@@ -157,8 +162,9 @@ class Player(object):
         return score
     
     def min_value_alphabeta(self, board, ply, turn, alpha, beta):
-        """ Find the minimax value for the next move for this player
-            at a given board configuation. Returns score."""
+        """Find the minimax value for the next move for this player at
+        a given board configuation. Return score.
+        """
         if board.game_over():
             return turn.score(board)
         score = float('inf')
@@ -169,7 +175,7 @@ class Player(object):
             # make a new player to play the other side
             opponent = Player(self.opp, self.type, self.ply)
             # Copy the board so that we don't ruin it
-            nextBoard = deepcopy(board)
+            nextBoard = copy.deepcopy(board)
             nextBoard.make_move(self.num, m)
             s = opponent.max_value_alphabeta(nextBoard, ply-1, turn, alpha, beta)
             #print "s in min_value is: " + str(s)
@@ -186,10 +192,10 @@ class Player(object):
             move = input("Please enter your move:")
             while not board.legal_move(self.num, move):
                 print move, "is not valid"
-                move = input( "Please enter your move" )
+                move = input("Please enter your move:")
             return move
         elif self.type == self.RANDOM:
-            move = choice(board.legal_moves(self.num))
+            move = random.choice(board.legal_moves(self.num))
             print "chose move", move
             return move
         elif self.type == self.MINIMAX:
@@ -201,11 +207,6 @@ class Player(object):
             print "chose move", move, " with value", val
             return move
         elif self.type == self.CUSTOM:
-            # TODO: Implement a custom player
-            # You should fill this in with a call to your best move choosing
-            # function.  You may use whatever search algorithm and scoring
-            # algorithm you like.  Remember that your player must make
-            # each move in about 10 seconds or less.
             customPlayer = kjw731(self.num, self.type, self.ply)
             val, move = customPlayer.custom_move(board, self.ply)
             print "chose move", move, " with value", val
@@ -222,16 +223,12 @@ class Player(object):
 
 # Note, you should change the name of this player to be your netid
 class kjw731(Player):
-    """ Defines a player that knows how to evaluate a Mancala gameboard
-        intelligently """
+    """Defines a player that knows how to evaluate a Mancala gameboard
+    intelligently
+    """
 
     def score(self, board):
-        """ Evaluate the Mancala board for this player """
-        # Currently this function just calls Player's score
-        # function.  You should replace the line below with your own code
-        # for evaluating the board
-        # print "Calling score in kjw731"
-
+        """Evaluate the Mancala board for this player."""
         # Reward player for winning the game (more than 24 pebbles in score cup)
         playerWins = 0
         if board.scoreCups[self.num-1] > 24:
@@ -276,22 +273,16 @@ class kjw731(Player):
         return playerWins + 10*(ourTotalPebbles - oppTotalPebbles) + 10*canBeCaptured - 30*oppCanBeCaptured + 30*mancalaDiff + 5*exactMancalaCups - 5*oppExactMancalaCups
 
     def custom_move(self, board, ply):
-        """ Make move according to alpha-beta search result """
-        # print "Calling custom_move with ply =", ply
+        """Make move according to alpha-beta search result."""
         return self.alphabeta_move(board, ply)
         
 class kjw731_Alt(Player):
-    """ Alternate class to use against kjw731
-        Use to compare two score functions by playing against each other
-     """
+    """Alternate class to use against kjw731.
+    Use to compare two score functions by playing against each other.
+    """
 
     def score(self, board):
-        """ Evaluate the Mancala board for this player """
-        # Currently this function just calls Player's score
-        # function.  You should replace the line below with your own code
-        # for evaluating the board
-        # print "Calling score in kjw731_Alt"
-
+        """Evaluate the Mancala board for this player."""
         # Reward player for winning the game (more than 24 pebbles in score cup)
         playerWins = 0
         if board.scoreCups[self.num-1] > 24:
@@ -327,7 +318,6 @@ class kjw731_Alt(Player):
         return playerWins + 15*canCapture + 2*mancalaDiff + 10*exactMancalaCups - 10*oppExactMancalaCups - 0.25*capturablePebbles
 
     def custom_move(self, board, ply):
-        """ Make move according to alpha-beta search result """
-        # print "Calling custom_move ALT with ply =", ply
+        """Make move according to alpha-beta search result."""
         return self.alphabeta_move(board, ply)
         

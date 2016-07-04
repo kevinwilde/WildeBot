@@ -5,15 +5,19 @@ class Game(object):
     """
 
     def save_game(self, filename):
-        """Given a file name, save the current game to the file using pickle."""
+        """Given a file name, save the current game to the file using
+        pickle.
+        """
         with open(filename, "w") as f:
             p = pickle.Pickler(f)
             p.dump(self)
 
     @staticmethod
     def load_game(filename):
-        """Given a file name, load and return the object stored in the file."""
+        """Given a file name, load and return the object stored in the
+        file.
+        """
         with open(filename, "r") as f:
             u = pickle.Unpickler(f)
-            dObj = u.load()
-        return dObj
+            obj = u.load()
+        return obj

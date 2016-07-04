@@ -5,17 +5,22 @@
 # of times in either the negative or positive training files.
 # (Min set to 7, see classify function)
 
-import math, os, pickle, re
+import math
+import os
+import pickle
+import re
+
 import classdata
 
-class Bayes_Classifier(object):
+class BayesClassifier(object):
 
     def __init__(self):
-        """This method initializes and trains the Naive Bayes Sentiment Classifier.  If a 
-        cache of a trained classifier has been stored, it loads this cache.  Otherwise, 
-        the system will proceed through training.  After running this method, the classifier 
-        is ready to classify input text."""
-        
+        """This method initializes and trains the Naive Bayes Sentiment
+        Classifier.  If a cache of a trained classifier has been
+        stored, it loads this cache.  Otherwise, the system will
+        proceed through training.  After running this method, the
+        classifier is ready to classify input text.
+        """
         self.reviews_directory = "bayes/movies_reviews/"
         self.neg_data_filename = "bayes/neg_data_best.pickle"
         self.pos_data_filename = "bayes/pos_data_best.pickle"
@@ -32,51 +37,49 @@ class Bayes_Classifier(object):
 
     def get_file_list(self):
         """Get list of all files in reviews directory"""
-
-        lFileList = []
-        for fFileObj in os.walk(self.reviews_directory):
-            lFileList = fFileObj[2]
+        file_list = []
+        for file_obj in os.walk(self.reviews_directory):
+            file_list = file_obj[2]
             break
-        return lFileList
+        return file_list
 
 
-    def get_true_class(self, file_name):
+    def get_true_class(self, filename):
         """Return 0 for negative review, 1 for positive review"""
-
-        if "-1-" in file_name:
+        if "-1-" in filename:
             return 0
-        elif "-5-" in file_name:
+        elif "-5-" in filename:
             return 1
         return -1
 
 
     def stem(self, word):
         """Remove common suffixes from words, returning just the stem"""
-
         stemmed_word = word.lower()
-        endings = ["ing", "es", "ed", "er", "ly", "cy", "dom", "en", "tion",
-                    "ence", "ent", "dom", "est", "ful", "fy", "ial", "ian",
-                    "ic", "ine", "ish", "ism", "ist", "ite", "ity", "ive",
-                    "ize", "less", "ment", "ness", "ology", "ty"]
+        endings = [
+            "ing", "es", "ed", "er", "ly", "cy", "dom", "en", "tion",
+            "ence", "ent", "dom", "est", "ful", "fy", "ial", "ian",
+            "ic", "ine", "ish", "ism", "ist", "ite", "ity", "ive",
+            "ize", "less", "ment", "ness", "ology", "ty"
+        ]
         for ending in endings:
-            if stemmed_word[-len(ending):] == ending:
+            if stemmed_word.endswith(ending):
                 return stemmed_word[:-len(ending)]
         return stemmed_word
 
 
-    def train(self, lTrainFiles=[]):   
+    def train(self, train_files=[]):
         """Trains the Naive Bayes Sentiment Classifier."""
-
-        if len(lTrainFiles) == 0:
-            lTrainFiles = self.get_file_list()
+        if len(train_files) == 0:
+            train_files = self.get_file_list()
 
         neg = classdata.ClassData()
         pos = classdata.ClassData()
 
-        for sFilename in lTrainFiles:
+        for filename in train_files:
 
-            true_class = self.get_true_class(sFilename)
-            word_list = self.tokenize(self.loadFile(self.reviews_directory + sFilename))
+            true_class = self.get_true_class(filename)
+            word_list = self.tokenize(self.load_file(self.reviews_directory + filename))
 
             # Negative
             if true_class == 0:
@@ -115,13 +118,13 @@ class Bayes_Classifier(object):
         self.save(pos, self.pos_data_filename)
 
 
-    def classify(self, sText, never_neutral=False):
-        """Given a target string sText, this function returns the most likely
+    def classify(self, text, never_neutral=False):
+        """Given a target string text, this function returns the most likely
         document class to which the target string belongs (i.e., positive,
         negative or neutral). If never_neutral is set to True, it will never
         output neutral."""
         
-        lWordList = self.tokenize(sText)
+        word_list = self.tokenize(text)
 
         min_feature_frequency = 7
 
@@ -133,12 +136,12 @@ class Bayes_Classifier(object):
         sum_of_logs_given_neg = math.log(prob_neg_prior, 2)
         sum_of_logs_given_pos = math.log(prop_pos_prior, 2)
 
-        for i in range(len(lWordList)):
+        for i in range(len(word_list)):
             cond_prob_neg = 0
             cond_prob_pos = 0
 
             # Unigrams
-            unigram = self.stem(lWordList[i])
+            unigram = self.stem(word_list[i])
 
             if (unigram in self.neg_data.feature_dict and self.neg_data.feature_dict[unigram] > min_feature_frequency) \
               or (unigram in self.pos_data.feature_dict and self.pos_data.feature_dict[unigram] > min_feature_frequency):
@@ -154,8 +157,8 @@ class Bayes_Classifier(object):
                 cond_prob_pos += math.log(uni_cond_prob_pos, 2)
 
             # Bigrams
-            if i+1 < len(lWordList):
-                bigram = self.stem(lWordList[i]) + ' ' + self.stem(lWordList[i+1])
+            if i+1 < len(word_list):
+                bigram = self.stem(word_list[i]) + ' ' + self.stem(word_list[i+1])
 
                 if (bigram in self.neg_data.feature_dict and self.neg_data.feature_dict[bigram] > min_feature_frequency) \
                   or (bigram in self.pos_data.feature_dict and self.pos_data.feature_dict[bigram] > min_feature_frequency):
@@ -185,48 +188,48 @@ class Bayes_Classifier(object):
         #     return "negative"
 
 
-    def loadFile(self, sFilename):
-        """Given a file name, return the contents of the file as a string."""
-
-        f = open(sFilename, "r")
-        sTxt = f.read()
-        f.close()
-        return sTxt
+    def load_file(self, filename):
+        """Given a file name, return the contents of the file as a
+        string.
+        """
+        with open(filename, "r") as f:
+            contents = f.read()
+        return contents
    
-    def save(self, dObj, sFilename):
-        """Given an object and a file name, write the object to the file using pickle."""
-
-        f = open(sFilename, "w")
-        p = pickle.Pickler(f)
-        p.dump(dObj)
-        f.close()
+    def save(self, obj, filename):
+        """Given an object and a file name, write the object to the
+        file using pickle.
+        """
+        with open(filename, "w") as f:
+            p = pickle.Pickler(f)
+            p.dump(obj)
    
-    def load(self, sFilename):
-        """Given a file name, load and return the object stored in the file."""
+    def load(self, filename):
+        """Given a file name, load and return the object stored in the
+        file.
+        """
+        with open(filename, "r") as f:
+            u = pickle.Unpickler(f)
+            obj = u.load()
+        return obj
 
-        f = open(sFilename, "r")
-        u = pickle.Unpickler(f)
-        dObj = u.load()
-        f.close()
-        return dObj
-
-    def tokenize(self, sText): 
-        """Given a string of text sText, returns a list of the individual tokens that 
-        occur in that string (in order)."""
-
-        lTokens = []
-        sToken = ""
-        for c in sText:
+    def tokenize(self, text): 
+        """Given a string of text text, returns a list of the
+        individual tokens that occur in that string (in order).
+        """
+        tokens = []
+        token = ""
+        for c in text:
             if re.match("[a-zA-Z0-9]", str(c)) != None or c == "\"" or c == "_" or c == "-":
-                sToken += c
+                token += c
             else:
-                if sToken != "":
-                    lTokens.append(sToken)
-                    sToken = ""
+                if token != "":
+                    tokens.append(token)
+                    token = ""
                 if c.strip() != "":
-                    lTokens.append(str(c.strip()))
+                    tokens.append(str(c.strip()))
                
-        if sToken != "":
-            lTokens.append(sToken)
+        if token != "":
+            tokens.append(token)
 
-        return lTokens
+        return tokens

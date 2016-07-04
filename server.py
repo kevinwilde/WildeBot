@@ -1,7 +1,8 @@
 from flask import Flask, request
 import json
 
-import bot, setup
+import bot
+import setup
 
 app = Flask(__name__)
 
@@ -33,8 +34,9 @@ def handle_messages():
     return "ok"
 
 def messaging_events(payload):
-    """Generate tuples of (sender_id, message_text) from the
-    provided payload."""
+    """Generate tuples of (sender_id, message_text) from the provided
+    payload.
+    """
     data = json.loads(payload)
     messaging_events = data["entry"][0]["messaging"]
     for event in messaging_events:

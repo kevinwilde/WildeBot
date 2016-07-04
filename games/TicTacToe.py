@@ -2,19 +2,21 @@ import unittest
 from Game import *
 
 class TTTBoard(Game):
+
     def __init__(self):
-        """ Initializes the data members."""
+        """Initialize the data members."""
         self.reset()
         
     def reset(self):
-        """ Reset the board for a new game """
+        """Reset the board for a new game."""
         self.SIZE = 3
         self.board = [' ']*(self.SIZE*self.SIZE)
         self.turn = 1
     
     def __str__(self):
-        """ Returns a string representation of the board where
-            each empty square is indicated with the number of its move"""
+        """Return a string representation of the board where each
+        empty square is indicated with the number of its move.
+        """
         ret = "\n"
         for i in range(len(self.board)):
             if self.board[i] == " ":
@@ -32,12 +34,14 @@ class TTTBoard(Game):
         return ret
 
     def legal_move(self, playerNum, move):
-        """Returns true or false, whether the move is legal for the
-        player."""
+        """Return true or false, whether the move is legal for the
+        player.
+        """
         return move in self.legal_moves(playerNum)
 
     def legal_moves(self, playerNum):
-        """ Returns the legal moves remianing for the player in question"""
+        """Return the legal moves remaining for the player in question.
+        """
         moves = []
         for m in range(len(self.board)):
             if self.board[m] == ' ':
@@ -45,13 +49,12 @@ class TTTBoard(Game):
         return moves
 
     def make_move(self, playerNum, pos):
-        """ Make a move for player in pos. """
+        """Make a move for player in pos."""
         move = pos - 1
         
         if (move not in range(len(self.board)) 
-            or self.board[move] != ' '
-            or self.turn != playerNum):
-
+                or self.board[move] != ' '
+                or self.turn != playerNum):
             return False
 
         if playerNum == 1:
@@ -65,14 +68,14 @@ class TTTBoard(Game):
         return True
     
     def row_win(self, c):
-        """ Has the player playing char c won in a row?"""
+        """Determine if the player playing char c won in a row."""
         for i in range(self.SIZE):
             if self.board[i*self.SIZE:(i+1)*self.SIZE] == [c]*self.SIZE:
                 return True
         return False
     
     def col_win(self, c):
-        """ Has the player playing char c won in a column?"""
+        """Determine if the player playing char c won in a column."""
         for i in range(self.SIZE):
             col = []
             for j in range(self.SIZE):
@@ -82,7 +85,7 @@ class TTTBoard(Game):
         return False
     
     def diag_win(self, c):
-        """ Has the player playing char c won in a diagonal?"""
+        """Determine if the player playing char c won in a diagonal."""
         diag = []
         offdiag = []
         for i in range(self.SIZE):
@@ -93,32 +96,34 @@ class TTTBoard(Game):
         return False
     
     def has_won_player(self, c):
-        """ Has the player playing c won?"""
+        """Determine if the player playing char c has won."""
         return self.row_win(c) or self.col_win(c) or self.diag_win(c)
     
-    def has_won(self, playerNum):
-        """ Returns who has won: X, 0, or None"""
-        if playerNum == 1:
+    def has_won(self, playernum):
+        """Determine if the player denoted by playernum has won."""
+        if playernum == 1:
             return self.has_won_player('X')
-        elif playerNum == 2:
+        elif playernum == 2:
             return self.has_won_player('0')
         else:
-            print playerNum
-            raise ValueError("playerNum must be 1 or 2")
+            raise ValueError("playernum must be 1 or 2")
+
+    def board_full(self):
+        """Determine if board is full."""
+        for square in self.board:
+            if square == ' ':
+                return False
+        return True
 
     def game_over(self):
-        """ Returns True if the game is over, and false if not"""
-        if self.has_won_player('X') or self.has_won_player('0'):
-            return True
-        else:
-            for move in self.board:
-                if move == ' ':
-                    return False
-            return True
+        """Determine if game is over."""
+        return (self.has_won_player('X') or self.has_won_player('0')
+                or self.board_full())
 
 
 #### Unit Tests
 class TestTTT(unittest.TestCase):
+    
     def test_legal_moves_emptyboard(self):
         t = TTTBoard()
         self.assertEqual(t.legal_moves(1), range(1,10))
