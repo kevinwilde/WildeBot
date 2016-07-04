@@ -9,7 +9,7 @@ app = Flask(__name__)
 PAT = '***REMOVED***'
 PASSWORD = '***REMOVED***'
 
-setup.create_persistent_menu(PAT)
+setup.initialize(PAT)
 mr_bot = bot.Bot(PAT)
 
 

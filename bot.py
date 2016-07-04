@@ -1,12 +1,12 @@
 import json, requests
 
-import bayesbest
+import bayes
 import games
 
 class Bot(object):
     def __init__(self, token):
         self.token = token
-        self.bayes_classifier = bayesbest.Bayes_Classifier()
+        self.bayes_classifier = bayes.bayesbest.Bayes_Classifier()
         self.ttt_extension = "TTTGame.pickle"
         self.mancala_extension = "MancGame.pickle"
 

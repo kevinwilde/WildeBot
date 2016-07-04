@@ -29,3 +29,8 @@ def create_persistent_menu(token):
         headers={'Content-type': 'application/json'})
     if r.status_code != requests.codes.ok:
         print r.text
+
+
+def initialize(token, persistent_menu=True):
+    if persistent_menu:
+        create_persistent_menu(token)
