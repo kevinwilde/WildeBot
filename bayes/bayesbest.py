@@ -88,16 +88,18 @@ class BayesClassifier(object):
                 for i in range(len(word_list)):
                     # Unigram
                     unigram = self.stem(word_list[i])
-                    neg.feature_dict[unigram] = 1 + (neg.feature_dict[unigram]
-                                                     if unigram in neg.feature_dict
-                                                     else 0)
+                    if unigram in neg.feature_dict:
+                        neg.feature_dict[unigram] += 1
+                    else:
+                        neg.feature_dict[unigram] = 1
 
                     # Bigram
                     if i+1 < len(word_list):
                         bigram = self.stem(word_list[i]) + ' ' + self.stem(word_list[i+1])
-                        neg.feature_dict[bigram] = 1 + (neg.feature_dict[bigram]
-                                                        if bigram in neg.feature_dict
-                                                        else 0)
+                        if bigram in neg.feature_dict:
+                            neg.feature_dict[bigram] += 1
+                        else:
+                            neg.feature_dict[bigram] = 1
 
             # Positive
             elif true_class == 1:
@@ -105,16 +107,18 @@ class BayesClassifier(object):
                 for i in range(len(word_list)):
                     # Unigram
                     unigram = self.stem(word_list[i])
-                    pos.feature_dict[unigram] = 1 + (pos.feature_dict[unigram]
-                                                     if unigram in pos.feature_dict
-                                                     else 0)
+                    if unigram in pos.feature_dict:
+                        pos.feature_dict[unigram] += 1
+                    else:
+                        pos.feature_dict[unigram] = 1
 
                     # Bigram
                     if i+1 < len(word_list):
                         bigram = self.stem(word_list[i]) + ' ' + self.stem(word_list[i+1])
-                        pos.feature_dict[bigram] = 1 + (pos.feature_dict[bigram]
-                                                        if bigram in pos.feature_dict
-                                                        else 0)
+                        if bigram in pos.feature_dict:
+                            pos.feature_dict[bigram] += 1
+                        else:
+                            pos.feature_dict[bigram] = 1
 
         neg.sum_of_all_features = sum([neg.feature_dict[f] for f in neg.feature_dict])
         pos.sum_of_all_features = sum([pos.feature_dict[f] for f in pos.feature_dict])

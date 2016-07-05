@@ -1,8 +1,8 @@
 import json
 import requests
 
-import bayes
-import games
+import wildebot.bayes as bayes
+import wildebot.games as games
 
 class Bot(object):
 
@@ -52,22 +52,23 @@ class Bot(object):
 
     def send_text_message(self, recipient, text):
         """Send the message text to recipient with id recipient."""
-        r = requests.post("https://graph.facebook.com/v2.6/me/messages",
-                          params={
-                              "access_token": self.token
-                          },
-                          data=json.dumps({
-                              "recipient": {
-                                  "id": recipient
-                              },
-                              "message": {
-                                  "text": text.decode('unicode_escape')
-                              }
-                          }),
-                          headers={
-                              "Content-type": "application/json"
-                          }
-                         )
+        r = requests.post(
+            "https://graph.facebook.com/v2.6/me/messages",
+            params={
+                "access_token": self.token
+            },
+            data=json.dumps({
+                "recipient": {
+                    "id": recipient
+                },
+                "message": {
+                    "text": text.decode('unicode_escape')
+                }
+            }),
+            headers={
+                "Content-type": "application/json"
+            }
+        )
         if r.status_code != requests.codes.ok:
             print r.text
 
