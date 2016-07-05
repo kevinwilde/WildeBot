@@ -1,2 +1,1 @@
-import bayesbest
-import classdata
+from bayesbest import BayesClassifier

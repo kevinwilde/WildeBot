@@ -8,7 +8,7 @@ class Bot(object):
 
     def __init__(self, token):
         self.token = token
-        self.bayes_classifier = bayes.bayesbest.BayesClassifier()
+        self.bayes_classifier = bayes.BayesClassifier()
         self.ttt_extension = "TTTGame.pickle"
         self.mancala_extension = "MancGame.pickle"
 

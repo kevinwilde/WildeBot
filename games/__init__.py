@@ -1,4 +1,1 @@
-import Game
-import Mancala
-import Player
-import TicTacToe
+__all__ = ['Game', 'Mancala', 'Player', 'TicTacToe']
