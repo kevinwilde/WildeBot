@@ -1,1 +1,4 @@
-__all__ = ['Game', 'Mancala', 'Player', 'TicTacToe']
+import Game
+import Mancala
+import Player
+import TicTacToe
