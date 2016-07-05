@@ -6,7 +6,6 @@ import setup
 
 app = Flask(__name__)
 
-
 PAT = '***REMOVED***'
 PASSWORD = '***REMOVED***'
 
