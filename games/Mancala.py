@@ -1,4 +1,3 @@
-import unittest
 from Game import *
 
 class MancalaBoard(Game):

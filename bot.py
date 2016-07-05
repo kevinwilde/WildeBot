@@ -30,11 +30,11 @@ class Bot(object):
             self.send_message(sender, reverse_message)
 
         # Tic Tac Toe
-        elif len(tokens) > 1 and tokens[0].lower() =="ttt":
+        elif len(tokens) > 1 and tokens[0].lower() == "ttt":
             self.host_ttt_game(sender, tokens)
 
         # Mancala
-        elif len(tokens) > 1 and tokens[0].lower() =="mancala":
+        elif len(tokens) > 1 and tokens[0].lower() == "mancala":
             self.host_mancala_game(sender, tokens)
 
         # Bayes
@@ -53,21 +53,21 @@ class Bot(object):
     def send_text_message(self, recipient, text):
         """Send the message text to recipient with id recipient."""
         r = requests.post("https://graph.facebook.com/v2.6/me/messages",
-                params = {
-                    "access_token": self.token
-                },
-                data = json.dumps({
-                    "recipient": {
-                        "id": recipient
-                    },
-                    "message": {
-                        "text": text.decode('unicode_escape')
-                    }
-                }),
-                headers = {
-                    'Content-type': 'application/json'
-                }
-            )
+                          params={
+                              "access_token": self.token
+                          },
+                          data=json.dumps({
+                              "recipient": {
+                                  "id": recipient
+                              },
+                              "message": {
+                                  "text": text.decode('unicode_escape')
+                              }
+                          }),
+                          headers={
+                              "Content-type": "application/json"
+                          }
+                         )
         if r.status_code != requests.codes.ok:
             print r.text
 
@@ -132,7 +132,7 @@ class Bot(object):
                 elif t.legal_move(1, move):
                     t.make_move(1, move)
                     self.send_message(sender, str(t))
-                    
+
                     if t.game_over():
                         if t.has_won(1):
                             self.send_message(sender, "You win!")
@@ -145,13 +145,13 @@ class Bot(object):
                         ab_move = player2.choose_move(t)
                         t.make_move(2, ab_move)
                         self.send_message(sender, str(t))
-                        
+
                         if t.game_over():
                             if t.has_won(2):
                                 self.send_message(sender, "I win!")
                             else:
                                 self.send_message(sender, "Cat's game")
-                    
+
                     t.save_game(sender + self.ttt_extension)
                 else:
                     self.send_message(sender, "Illegal move")

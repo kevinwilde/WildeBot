@@ -1,5 +1,5 @@
-from flask import Flask, request
 import json
+from flask import Flask, request
 
 import bot
 import setup
@@ -15,6 +15,7 @@ mr_bot = bot.Bot(PAT)
 
 @app.route('/', methods=['GET'])
 def handle_verification():
+    """Handle verification."""
     print "Handling Verification"
     if request.args.get('hub.verify_token', '') == PASSWORD:
         print "Verification successful"
@@ -25,7 +26,7 @@ def handle_verification():
 
 @app.route('/', methods=['POST'])
 def handle_messages():
-    print "Handling Messages"
+    """Handle messages."""
     payload = request.get_data()
     for sender, message in messaging_events(payload):
         print "Incoming from %s: %s" % (sender, message)
@@ -37,8 +38,8 @@ def messaging_events(payload):
     payload.
     """
     data = json.loads(payload)
-    messaging_events = data["entry"][0]["messaging"]
-    for event in messaging_events:
+    message_events = data["entry"][0]["messaging"]
+    for event in message_events:
         # Messages
         if "message" in event and "text" in event["message"]:
             yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
@@ -46,7 +47,7 @@ def messaging_events(payload):
         # Postbacks
         elif "postback" in event and "payload" in event["postback"]:
             yield event["sender"]["id"], event["postback"]["payload"].encode('unicode_escape')
-        
+
         else:
             yield event["sender"]["id"], "I can't echo this"
 

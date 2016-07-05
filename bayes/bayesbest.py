@@ -1,7 +1,7 @@
 # BEST CLASSIFIER
 # Remove common suffixes from words, so that only the stem is considered.
 # Add both unigrams and bigrams to feature dictionaries, but in classification
-# only consider the unigrams/bigrams that appeared more than a minimum number 
+# only consider the unigrams/bigrams that appeared more than a minimum number
 # of times in either the negative or positive training files.
 # (Min set to 7, see classify function)
 
@@ -79,7 +79,8 @@ class BayesClassifier(object):
         for filename in train_files:
 
             true_class = self.get_true_class(filename)
-            word_list = self.tokenize(self.load_file(self.reviews_directory + filename))
+            word_list = self.tokenize(self.load_file(self.reviews_directory
+                                                     + filename))
 
             # Negative
             if true_class == 0:
@@ -87,12 +88,16 @@ class BayesClassifier(object):
                 for i in range(len(word_list)):
                     # Unigram
                     unigram = self.stem(word_list[i])
-                    neg.feature_dict[unigram] = 1 + (neg.feature_dict[unigram] if unigram in neg.feature_dict else 0)
+                    neg.feature_dict[unigram] = 1 + (neg.feature_dict[unigram]
+                                                     if unigram in neg.feature_dict
+                                                     else 0)
 
                     # Bigram
                     if i+1 < len(word_list):
                         bigram = self.stem(word_list[i]) + ' ' + self.stem(word_list[i+1])
-                        neg.feature_dict[bigram] = 1 + (neg.feature_dict[bigram] if bigram in neg.feature_dict else 0)
+                        neg.feature_dict[bigram] = 1 + (neg.feature_dict[bigram]
+                                                        if bigram in neg.feature_dict
+                                                        else 0)
 
             # Positive
             elif true_class == 1:
@@ -100,12 +105,16 @@ class BayesClassifier(object):
                 for i in range(len(word_list)):
                     # Unigram
                     unigram = self.stem(word_list[i])
-                    pos.feature_dict[unigram] = 1 + (pos.feature_dict[unigram] if unigram in pos.feature_dict else 0)
-                    
+                    pos.feature_dict[unigram] = 1 + (pos.feature_dict[unigram]
+                                                     if unigram in pos.feature_dict
+                                                     else 0)
+
                     # Bigram
                     if i+1 < len(word_list):
                         bigram = self.stem(word_list[i]) + ' ' + self.stem(word_list[i+1])
-                        pos.feature_dict[bigram] = 1 + (pos.feature_dict[bigram] if bigram in pos.feature_dict else 0)
+                        pos.feature_dict[bigram] = 1 + (pos.feature_dict[bigram]
+                                                        if bigram in pos.feature_dict
+                                                        else 0)
 
         neg.sum_of_all_features = sum([neg.feature_dict[f] for f in neg.feature_dict])
         pos.sum_of_all_features = sum([pos.feature_dict[f] for f in pos.feature_dict])
@@ -118,12 +127,11 @@ class BayesClassifier(object):
         self.save(pos, self.pos_data_filename)
 
 
-    def classify(self, text, never_neutral=False):
+    def classify(self, text, ):
         """Given a target string text, this function returns the most likely
         document class to which the target string belongs (i.e., positive,
-        negative or neutral). If never_neutral is set to True, it will never
-        output neutral."""
-        
+        negative or neutral).
+        """
         word_list = self.tokenize(text)
 
         min_feature_frequency = 7
@@ -143,16 +151,22 @@ class BayesClassifier(object):
             # Unigrams
             unigram = self.stem(word_list[i])
 
-            if (unigram in self.neg_data.feature_dict and self.neg_data.feature_dict[unigram] > min_feature_frequency) \
-              or (unigram in self.pos_data.feature_dict and self.pos_data.feature_dict[unigram] > min_feature_frequency):
+            if ((unigram in self.neg_data.feature_dict and
+                 self.neg_data.feature_dict[unigram] > min_feature_frequency) or
+                    (unigram in self.pos_data.feature_dict and
+                     self.pos_data.feature_dict[unigram] > min_feature_frequency)):
 
                 # Negative
-                uni_freq_neg = 1 + (self.neg_data.feature_dict[unigram] if unigram in self.neg_data.feature_dict else 0)
+                uni_freq_neg = 1 + (self.neg_data.feature_dict[unigram]
+                                    if unigram in self.neg_data.feature_dict
+                                    else 0)
                 uni_cond_prob_neg = float(uni_freq_neg) / self.neg_data.sum_of_all_features
                 cond_prob_neg += math.log(uni_cond_prob_neg, 2)
 
                 # Positive
-                uni_freq_pos = 1 + (self.pos_data.feature_dict[unigram] if unigram in self.pos_data.feature_dict else 0)
+                uni_freq_pos = 1 + (self.pos_data.feature_dict[unigram]
+                                    if unigram in self.pos_data.feature_dict
+                                    else 0)
                 uni_cond_prob_pos = float(uni_freq_pos) / self.pos_data.sum_of_all_features
                 cond_prob_pos += math.log(uni_cond_prob_pos, 2)
 
@@ -160,16 +174,22 @@ class BayesClassifier(object):
             if i+1 < len(word_list):
                 bigram = self.stem(word_list[i]) + ' ' + self.stem(word_list[i+1])
 
-                if (bigram in self.neg_data.feature_dict and self.neg_data.feature_dict[bigram] > min_feature_frequency) \
-                  or (bigram in self.pos_data.feature_dict and self.pos_data.feature_dict[bigram] > min_feature_frequency):
+                if ((bigram in self.neg_data.feature_dict and
+                     self.neg_data.feature_dict[bigram] > min_feature_frequency) or
+                        (bigram in self.pos_data.feature_dict and
+                         self.pos_data.feature_dict[bigram] > min_feature_frequency)):
 
                     # Negative
-                    bi_freq_neg = 1 + (self.neg_data.feature_dict[bigram] if bigram in self.neg_data.feature_dict else 0)
+                    bi_freq_neg = 1 + (self.neg_data.feature_dict[bigram]
+                                       if bigram in self.neg_data.feature_dict
+                                       else 0)
                     bi_cond_prob_neg = float(bi_freq_neg) / self.neg_data.sum_of_all_features
                     cond_prob_neg += math.log(bi_cond_prob_neg, 2)
 
                     # Positive
-                    bi_freq_pos = 1 + (self.pos_data.feature_dict[bigram] if bigram in self.pos_data.feature_dict else 0)
+                    bi_freq_pos = 1 + (self.pos_data.feature_dict[bigram]
+                                       if bigram in self.pos_data.feature_dict
+                                       else 0)
                     bi_cond_prob_pos = float(bi_freq_pos) / self.pos_data.sum_of_all_features
                     cond_prob_pos += math.log(bi_cond_prob_pos, 2)
 
@@ -178,14 +198,6 @@ class BayesClassifier(object):
 
         diff = sum_of_logs_given_pos - sum_of_logs_given_neg
         return diff
-        # epsilon = 0 if never_neutral else 3
-        
-        # if abs(diff) < epsilon: # too close to call
-        #     return "neutral"
-        # elif diff > 0:  # P(pos) > P(neg)
-        #     return "positive"
-        # else:           # P(pos) < P(neg)
-        #     return "negative"
 
 
     def load_file(self, filename):
@@ -195,7 +207,7 @@ class BayesClassifier(object):
         with open(filename, "r") as f:
             contents = f.read()
         return contents
-   
+
     def save(self, obj, filename):
         """Given an object and a file name, write the object to the
         file using pickle.
@@ -203,7 +215,7 @@ class BayesClassifier(object):
         with open(filename, "w") as f:
             p = pickle.Pickler(f)
             p.dump(obj)
-   
+
     def load(self, filename):
         """Given a file name, load and return the object stored in the
         file.
@@ -213,14 +225,15 @@ class BayesClassifier(object):
             obj = u.load()
         return obj
 
-    def tokenize(self, text): 
+    def tokenize(self, text):
         """Given a string of text text, returns a list of the
         individual tokens that occur in that string (in order).
         """
         tokens = []
         token = ""
         for c in text:
-            if re.match("[a-zA-Z0-9]", str(c)) != None or c == "\"" or c == "_" or c == "-":
+            if (re.match("[a-zA-Z0-9]", str(c)) is not None or
+                    c == "\"" or c == "_" or c == "-"):
                 token += c
             else:
                 if token != "":
@@ -228,7 +241,7 @@ class BayesClassifier(object):
                     token = ""
                 if c.strip() != "":
                     tokens.append(str(c.strip()))
-               
+
         if token != "":
             tokens.append(token)
 
