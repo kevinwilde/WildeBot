@@ -176,7 +176,7 @@ class Bot(object):
                         self.send_message(sender, "Illegal move")
 
                 # Bot responds
-                while m.turn == 2  and not m.game_over():
+                while m.turn == 2 and not m.game_over():
                     self.send_message(sender, "My turn")
                     player2 = games.Player.Player(2, games.Player.Player.CUSTOM, ply=9)
                     ab_move = player2.choose_move(m)

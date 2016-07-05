@@ -182,7 +182,7 @@ class TestMancala(unittest.TestCase):
         self.assertEqual(m.scoreCups[1], 0)
         self.assertEqual(m.legal_moves(1), [1,2,4,5,6])
 
-    def test_clearBoardAtEnd(self):
+    def test_clear_board_at_end(self):
         m = MancalaBoard()
         m.P1Cups = [0,0,0,0,0,1]
         m.scoreCups = [23, 0]
@@ -190,6 +190,21 @@ class TestMancala(unittest.TestCase):
         self.assertEqual(m.P1Cups, [0] * m.NCUPS)
         self.assertEqual(m.P2Cups, [0] * m.NCUPS)
         self.assertTrue(m.game_over())
+
+    def test_series_of_moves(self):
+        m = MancalaBoard()
+        again = m.make_move(1, 3)
+        self.assertTrue(again)
+        again = m.make_move(1, 4)
+        self.assertFalse(again)
+        self.assertEqual(m.turn, 2)
+        again = m.make_move(2, 3)
+        self.assertTrue(again)
+        again = m.make_move(2, 2)
+        self.assertTrue(again)
+        again = m.make_move(2, 1)
+        self.assertFalse(again)
+        self.assertEqual(m.turn, 1)
 
 if __name__ == '__main__':
     unittest.main()
