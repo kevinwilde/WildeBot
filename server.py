@@ -1,8 +1,8 @@
 import json
 from flask import Flask, request
 
-import wildebot.bot as bot
-import wildebot.setup as setup
+import bot
+import setup
 
 app = Flask(__name__)
 

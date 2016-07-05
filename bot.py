@@ -1,8 +1,8 @@
 import json
 import requests
 
-import wildebot.bayes as bayes
-import wildebot.games as games
+import bayes
+import games
 
 class Bot(object):
 
