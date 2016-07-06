@@ -1,3 +1,7 @@
+"""
+This module provides an interface to the Facebook Send API.
+"""
+
 import json
 
 from . import post

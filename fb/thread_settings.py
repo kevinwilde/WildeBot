@@ -1,3 +1,7 @@
+"""
+This module provides an interface to the Facebook Thread Settings API.
+"""
+
 import json
 
 from . import post

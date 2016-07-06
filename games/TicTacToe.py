@@ -1,3 +1,7 @@
+"""
+This module provides an interface for two players to play Tic Tac Toe.
+"""
+
 from .Game import Game
 
 class TTTBoard(Game):

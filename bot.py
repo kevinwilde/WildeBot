@@ -1,3 +1,7 @@
+"""
+This module defines a Facebook Messenger WildeBot.
+"""
+
 import json
 import requests
 

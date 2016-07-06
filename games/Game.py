@@ -1,3 +1,8 @@
+"""
+This module provides a super class for games to inherit, allowing games
+to load and save their states using Pickle.
+"""
+
 import pickle
 
 class Game(object):

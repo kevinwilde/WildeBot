@@ -1,3 +1,7 @@
+"""
+This module provides an interface for two players to play Mancala.
+"""
+
 from .Game import Game
 
 class MancalaBoard(Game):

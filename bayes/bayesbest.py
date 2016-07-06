@@ -1,9 +1,12 @@
-# BEST CLASSIFIER
-# Remove common suffixes from words, so that only the stem is considered.
-# Add both unigrams and bigrams to feature dictionaries, but in classification
-# only consider the unigrams/bigrams that appeared more than a minimum number
-# of times in either the negative or positive training files.
-# (Min set to 7, see classify function)
+"""
+This module implements the bayes classifier trained with movie reviews.
+
+Remove common suffixes from words, so that only the stem is considered.
+Add both unigrams and bigrams to feature dictionaries, but in classification
+only consider the unigrams/bigrams that appeared more than a minimum number
+of times in either the negative or positive training files.
+(Min set to 7, see classify function)
+"""
 
 import math
 import os
