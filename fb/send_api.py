@@ -4,7 +4,7 @@ This module provides an interface to the Facebook Send API.
 
 import json
 
-from . import post
+from . import fb_request
 
 def mark_seen(access_token, recipient):
     set_sender_action(access_token, recipient, "mark_seen")
@@ -23,7 +23,7 @@ def set_sender_action(access_token, recipient, sender_action):
         },
         "sender_action": sender_action
     })
-    post.post_to_fb(access_token, data)
+    fb_request.post(access_token, data)
 
 def send_text_message(access_token, recipient, text):
     """Send the message text to recipient with id recipient."""
@@ -35,7 +35,7 @@ def send_text_message(access_token, recipient, text):
             "text": text.decode('unicode_escape')
         }
     })
-    post.post_to_fb(access_token, data)
+    fb_request.post(access_token, data)
 
 def send_attachment(access_token, recipient, attachment_type, attachment_url):
     data = json.dumps({
@@ -51,7 +51,7 @@ def send_attachment(access_token, recipient, attachment_type, attachment_url):
             }
         }
     })
-    post.post_to_fb(access_token, data)
+    fb_request.post(access_token, data)
 
 def send_generic_template(access_token, recipient, elements):
     data = json.dumps({
@@ -68,7 +68,7 @@ def send_generic_template(access_token, recipient, elements):
             }
         }
     })
-    post.post_to_fb(access_token, data)
+    fb_request.post(access_token, data)
 
 def send_button(access_token, recipient, text, buttons):
     data = json.dumps({
@@ -86,7 +86,7 @@ def send_button(access_token, recipient, text, buttons):
             }
         }
     })
-    post.post_to_fb(access_token, data)
+    fb_request.post(access_token, data)
 
 def send_quick_replies(access_token, recipient, text, quick_replies):
     data = json.dumps({
@@ -98,4 +98,4 @@ def send_quick_replies(access_token, recipient, text, quick_replies):
             "quick_replies": quick_replies
         }
     })
-    post.post_to_fb(access_token, data)
+    fb_request.post(access_token, data)

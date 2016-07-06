@@ -47,53 +47,9 @@ class Bot(object):
         # Bayes
         else:
             diff = self.bayes_classifier.classify(message)
-            fb.send_api.send_text_message(self.token, sender, str(diff) + " " + self.react(diff))
+            fb.send_api.send_text_message(self.token, sender, react(diff))
 
         return "ok"
-
-    def react(self, score):
-        """Return string based on score
-        Positive scores get more positive reactions
-        Negative scores get more negative reactions
-        """
-        reactions = [
-            "I don't ever want to hear from you again", #0
-            "You actually suck", #1
-            "That is incredibly mean", #2
-            "I don't appreciate you saying that", #3
-            "Please find something nicer to say", #4
-            "K", #5
-            "Ok", #6
-            "Is that a compliment?", #7
-            "Thanks", #8
-            "You are the best :)", #9
-            "You just made my day! Thank you!", #10
-            "What an amazing thing to hear! The world sure could use more people like you", #11
-            ]
-        if score < -12:
-            return reactions[0]
-        elif score < -10:
-            return reactions[1]
-        elif score < -8:
-            return reactions[2]
-        elif score < -6:
-            return reactions[3]
-        elif score < -4:
-            return reactions[4]
-        elif score < -2:
-            return reactions[5]
-        elif score < 2:
-            return reactions[6]
-        elif score < 4:
-            return reactions[7]
-        elif score < 6:
-            return reactions[8]
-        elif score < 8:
-            return reactions[9]
-        elif score < 10:
-            return reactions[10]
-        else:
-            return reactions[11]
 
     def host_ttt_game(self, sender, tokens):
         """Tic Tac Toe game hosted on server"""
@@ -196,3 +152,48 @@ def is_greeting(word):
     """Determines if word is a greeting"""
     greetings = ["hi", "hello", "hey"]
     return word.lower() in greetings
+
+def react(score):
+    """Return string based on score.
+
+    Positive scores get more positive reactions.
+    Negative scores get more negative reactions.
+    """
+    reactions = [
+        "I don't ever want to hear from you again", #0
+        "You actually suck", #1
+        "That is incredibly mean", #2
+        "I don't appreciate you saying that", #3
+        "Please find something nicer to say", #4
+        "K", #5
+        "Ok", #6
+        "Is that a compliment?", #7
+        "Thanks", #8
+        "You are the best :)", #9
+        "You just made my day! Thank you!", #10
+        "What an amazing thing to hear! The world sure could use more people like you", #11
+        ]
+    if score < -12:
+        return reactions[0]
+    elif score < -10:
+        return reactions[1]
+    elif score < -8:
+        return reactions[2]
+    elif score < -6:
+        return reactions[3]
+    elif score < -4:
+        return reactions[4]
+    elif score < -2:
+        return reactions[5]
+    elif score < 2:
+        return reactions[6]
+    elif score < 4:
+        return reactions[7]
+    elif score < 6:
+        return reactions[8]
+    elif score < 8:
+        return reactions[9]
+    elif score < 10:
+        return reactions[10]
+    else:
+        return reactions[11]

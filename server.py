@@ -52,9 +52,13 @@ def messaging_events(payload):
         else:
             yield event["sender"]["id"], "I can't echo this"
 
-def initialize(access_token, persistent_menu=True, greeting_text=True,
+def initialize(access_token, greeting_text=True, persistent_menu=True,
                get_started_btn=True):
     """Initialize bot according to arguments passed"""
+    fb.thread_settings.delete_persistent_menu(access_token)
+    fb.thread_settings.delete_get_started_btn(access_token)
+    if greeting_text:
+        fb.thread_settings.create_greeting_text(access_token, "Greetings!")
     if persistent_menu:
         menu = [
             {
@@ -74,13 +78,11 @@ def initialize(access_token, persistent_menu=True, greeting_text=True,
             }
         ]
         fb.thread_settings.create_persistent_menu(access_token, menu)
-    if greeting_text:
-        fb.thread_settings.create_greeting_text(access_token, "Greetings!")
     if get_started_btn:
         payload = [{"payload": "I don't know yet"}]
         fb.thread_settings.create_get_started_btn(access_token, payload)
 
-initialize(PAGE_ACCESS_TOKEN)
+initialize(PAGE_ACCESS_TOKEN, False, False, False)
 
 if __name__ == '__main__':
     app.run(debug=True)
