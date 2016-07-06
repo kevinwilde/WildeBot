@@ -10,7 +10,7 @@ import os
 import pickle
 import re
 
-import classdata
+from . import classdata
 
 class BayesClassifier(object):
 

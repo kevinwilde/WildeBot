@@ -2,47 +2,36 @@
 Set up messenger bot, including creating persistent menu
 """
 
-import json
-import requests
+from . import fb
 
-def create_persistent_menu(token):
-    """Create Persistent Menu"""
-    print "Call create_persistent_menu"
-    r = requests.post(
-        "https://graph.facebook.com/v2.6/me/thread_settings",
-        params={
-            "access_token": token
-        },
-        data=json.dumps({
-            "setting_type": "call_to_actions",
-            "thread_state": "existing_thread",
-            "call_to_actions": [
-                {
-                    "type": "postback",
-                    "title": "Play Mancala",
-                    "payload": "Mancala new"
-                },
-                {
-                    "type": "postback",
-                    "title": "Play TicTacToe",
-                    "payload": "TTT new"
-                },
-                {
-                    "type": "web_url",
-                    "title": "View Website",
-                    "url": "https://www.facebook.com/kevinwildebot"
-                }
-            ]
-        }),
-        headers={
-            "Content-type": "application/json"
-        }
-    )
-    if r.status_code != requests.codes.ok:
-        print r.text
-
-
-def initialize(token, persistent_menu=True):
+def initialize(access_token, persistent_menu=True, greeting_text=True,
+               get_started_btn=True):
     """Initialize bot according to arguments passed"""
     if persistent_menu:
-        create_persistent_menu(token)
+        menu = [
+            {
+                "type": "postback",
+                "title": "Play Mancala",
+                "payload": "Mancala new"
+            },
+            {
+                "type": "postback",
+                "title": "Play TicTacToe",
+                "payload": "TTT new"
+            },
+            {
+                "type": "web_url",
+                "title": "View Facebook Page",
+                "url": "https://www.facebook.com/kevinwildebot"
+            }
+        ]
+        fb.thread_settings.create_persistent_menu(access_token, menu)
+    if greeting_text:
+        fb.thread_settings.create_greeting_text(access_token, "Greetings!")
+    if get_started_btn:
+        payload = [
+            {
+                "payload": "I don't know yet"
+            }
+        ]
+        fb.thread_settings.create_get_started_btn(access_token, payload)

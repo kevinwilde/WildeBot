@@ -1,4 +1,4 @@
-import Game
-import Mancala
-import Player
-import TicTacToe
+from . import Game
+from . import Mancala
+from . import Player
+from . import TicTacToe
