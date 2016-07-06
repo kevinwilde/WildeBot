@@ -10,13 +10,9 @@ import bot
 import fb
 
 app = Flask(__name__)
-
 PAGE_ACCESS_TOKEN = os.environ['PAGE_ACCESS_TOKEN']
 PASSWORD = os.environ['PASSWORD']
-
 MESSENGER_BOT = bot.Bot(PAGE_ACCESS_TOKEN)
-
-initialize(PAGE_ACCESS_TOKEN)
 
 @app.route('/', methods=['GET'])
 def handle_verification():
@@ -83,6 +79,8 @@ def initialize(access_token, persistent_menu=True, greeting_text=True,
     if get_started_btn:
         payload = [{"payload": "I don't know yet"}]
         fb.thread_settings.create_get_started_btn(access_token, payload)
+
+initialize(PAGE_ACCESS_TOKEN)
 
 if __name__ == '__main__':
     app.run(debug=True)
