@@ -1,16 +1,17 @@
 import json
 from flask import Flask, request
+import os
 
 import bot
 import setup
 
 app = Flask(__name__)
 
-PAT = '***REMOVED***'
-PASSWORD = '***REMOVED***'
+PAGE_ACCESS_TOKEN = os.environ['PAGE_ACCESS_TOKEN']
+PASSWORD = os.environ['PASSWORD']
 
-setup.initialize(PAT)
-mr_bot = bot.Bot(PAT)
+setup.initialize(PAGE_ACCESS_TOKEN)
+mr_bot = bot.Bot(PAGE_ACCESS_TOKEN)
 
 
 @app.route('/', methods=['GET'])

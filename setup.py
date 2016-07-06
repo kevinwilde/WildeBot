@@ -29,9 +29,5 @@ def initialize(access_token, persistent_menu=True, greeting_text=True,
     if greeting_text:
         fb.thread_settings.create_greeting_text(access_token, "Greetings!")
     if get_started_btn:
-        payload = [
-            {
-                "payload": "I don't know yet"
-            }
-        ]
+        payload = [{"payload": "I don't know yet"}]
         fb.thread_settings.create_get_started_btn(access_token, payload)
