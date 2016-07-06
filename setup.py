@@ -2,7 +2,7 @@
 Set up messenger bot, including creating persistent menu
 """
 
-from . import fb
+import fb
 
 def initialize(access_token, persistent_menu=True, greeting_text=True,
                get_started_btn=True):

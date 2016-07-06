@@ -1,8 +1,8 @@
 import json
 from flask import Flask, request
 
-from . import bot
-from . import setup
+import bot
+import setup
 
 app = Flask(__name__)
 

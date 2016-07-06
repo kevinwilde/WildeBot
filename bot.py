@@ -1,9 +1,9 @@
 import json
 import requests
 
-from . import bayes
-from . import fb
-from . import games
+import bayes
+import fb
+import games
 
 class Bot(object):
 
