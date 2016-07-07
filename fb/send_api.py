@@ -4,16 +4,20 @@ This module provides an interface to the Facebook Send API.
 
 import json
 
-from . import fb_request
-
-def mark_seen(access_token, recipient):
-    set_sender_action(access_token, recipient, "mark_seen")
-
-def typing_on(access_token, recipient):
-    set_sender_action(access_token, recipient, "typing_on")
-
-def typing_off(access_token, recipient):
-    set_sender_action(access_token, recipient, "typing_off")
+def send_message(access_token, data):
+    """Send message via post request to Facebook page."""
+    r = requests.post(
+        "https://graph.facebook.com/v2.6/me/messages",
+        params={
+            "access_token": access_token
+        },
+        data=data,
+        headers={
+            "Content-type": "application/json"
+        }
+    )
+    if r.status_code != requests.codes.ok:
+        print r.text
 
 def set_sender_action(access_token, recipient, sender_action):
     """Set sender action."""
@@ -23,7 +27,16 @@ def set_sender_action(access_token, recipient, sender_action):
         },
         "sender_action": sender_action
     })
-    fb_request.post(access_token, data)
+    send_message(access_token, data)
+
+def mark_seen(access_token, recipient):
+    set_sender_action(access_token, recipient, "mark_seen")
+
+def typing_on(access_token, recipient):
+    set_sender_action(access_token, recipient, "typing_on")
+
+def typing_off(access_token, recipient):
+    set_sender_action(access_token, recipient, "typing_off")
 
 def send_text_message(access_token, recipient, text):
     """Send the message text to recipient with id recipient."""
@@ -35,7 +48,7 @@ def send_text_message(access_token, recipient, text):
             "text": text.decode('unicode_escape')
         }
     })
-    fb_request.post(access_token, data)
+    send_message(access_token, data)
 
 def send_attachment(access_token, recipient, attachment_type, attachment_url):
     data = json.dumps({
@@ -51,7 +64,7 @@ def send_attachment(access_token, recipient, attachment_type, attachment_url):
             }
         }
     })
-    fb_request.post(access_token, data)
+    send_message(access_token, data)
 
 def send_generic_template(access_token, recipient, elements):
     data = json.dumps({
@@ -68,7 +81,7 @@ def send_generic_template(access_token, recipient, elements):
             }
         }
     })
-    fb_request.post(access_token, data)
+    send_message(access_token, data)
 
 def send_button(access_token, recipient, text, buttons):
     data = json.dumps({
@@ -86,7 +99,7 @@ def send_button(access_token, recipient, text, buttons):
             }
         }
     })
-    fb_request.post(access_token, data)
+    send_message(access_token, data)
 
 def send_quick_replies(access_token, recipient, text, quick_replies):
     data = json.dumps({
@@ -98,4 +111,4 @@ def send_quick_replies(access_token, recipient, text, quick_replies):
             "quick_replies": quick_replies
         }
     })
-    fb_request.post(access_token, data)
+    send_message(access_token, data)

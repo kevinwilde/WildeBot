@@ -10,8 +10,10 @@ import fb
 import games
 
 class Bot(object):
+    """Class for WildeBot."""
 
     def __init__(self, token):
+        """Create instance of Bot class."""
         self.token = token
         self.bayes_classifier = bayes.BayesClassifier()
         self.ttt_extension = "TTTGame.pickle"
@@ -20,7 +22,7 @@ class Bot(object):
     def act_on_message(self, sender, message):
         """Determine how to respond to message"""
         fb.send_api.mark_seen(self.token, sender)
-        fb.send_api.typing_on(self.token, sender)
+        # fb.send_api.typing_on(self.token, sender)
         tokens = self.bayes_classifier.tokenize(message)
 
         # Greeting
