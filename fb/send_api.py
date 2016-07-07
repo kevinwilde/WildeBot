@@ -3,6 +3,7 @@ This module provides an interface to the Facebook Send API.
 """
 
 import json
+import requests
 
 def send_message(access_token, data):
     """Send message via post request to Facebook page."""

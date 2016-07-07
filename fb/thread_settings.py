@@ -3,6 +3,7 @@ This module provides an interface to the Facebook Thread Settings API.
 """
 
 import json
+import requests
 
 def create_thread_setting(access_token, data):
     """Create thread setting via post request to Facebook page."""
