@@ -82,7 +82,7 @@ def initialize(access_token, greeting_text=True, persistent_menu=True,
         payload = [{"payload": "I don't know yet"}]
         fb.thread_settings.create_get_started_btn(access_token, payload)
 
-initialize(PAGE_ACCESS_TOKEN, False, False, False)
+initialize(PAGE_ACCESS_TOKEN)
 
 if __name__ == '__main__':
     app.run(debug=True)

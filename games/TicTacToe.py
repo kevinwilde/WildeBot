@@ -9,13 +9,13 @@ class TTTBoard(Game):
     def __init__(self):
         """Initialize the data members."""
         self.reset()
-        
+
     def reset(self):
         """Reset the board for a new game."""
-        self.SIZE = 3
-        self.board = [' ']*(self.SIZE*self.SIZE)
+        self.size = 3
+        self.board = [' ']*(self.size*self.size)
         self.turn = 1
-    
+
     def __str__(self):
         """Return a string representation of the board where each
         empty square is indicated with the number of its move.
@@ -32,76 +32,76 @@ class TTTBoard(Game):
                     ret += "\n" + "-"*9 + "\n"
             else:
                 ret += " | "
-        
+
         ret += "\n"
         return ret
 
-    def legal_move(self, playerNum, move):
+    def legal_move(self, playernum, move):
         """Return true or false, whether the move is legal for the
         player.
         """
-        return move in self.legal_moves(playerNum)
+        return move in self.legal_moves(playernum)
 
-    def legal_moves(self, playerNum):
+    def legal_moves(self, playernum):
         """Return the legal moves remaining for the player in question.
         """
         moves = []
-        for m in range(len(self.board)):
-            if self.board[m] == ' ':
-                moves.append(m+1)
+        for move in range(len(self.board)):
+            if self.board[move] == ' ':
+                moves.append(move+1)
         return moves
 
-    def make_move(self, playerNum, pos):
+    def make_move(self, playernum, pos):
         """Make a move for player in pos."""
         move = pos - 1
-        
-        if (move not in range(len(self.board)) 
+
+        if (move not in range(len(self.board))
                 or self.board[move] != ' '
-                or self.turn != playerNum):
+                or self.turn != playernum):
             return False
 
-        if playerNum == 1:
+        if playernum == 1:
             self.board[move] = 'X'
-        elif playerNum == 2:
+        elif playernum == 2:
             self.board[move] = '0'
         else:
-            print playerNum
-            raise ValueError("playerNum must be 1 or 2")
-        self.turn = 2 - playerNum + 1
+            print playernum
+            raise ValueError("playernum must be 1 or 2")
+        self.turn = 2 - playernum + 1
         return True
-    
+
     def row_win(self, c):
         """Determine if the player playing char c won in a row."""
-        for i in range(self.SIZE):
-            if self.board[i*self.SIZE:(i+1)*self.SIZE] == [c]*self.SIZE:
+        for i in range(self.size):
+            if self.board[i*self.size:(i+1)*self.size] == [c]*self.size:
                 return True
         return False
-    
+
     def col_win(self, c):
         """Determine if the player playing char c won in a column."""
-        for i in range(self.SIZE):
+        for i in range(self.size):
             col = []
-            for j in range(self.SIZE):
-                col += [self.board[j*self.SIZE+i]]
-                if col == [c]*self.SIZE:
+            for j in range(self.size):
+                col += [self.board[j*self.size+i]]
+                if col == [c]*self.size:
                     return True
         return False
-    
+
     def diag_win(self, c):
         """Determine if the player playing char c won in a diagonal."""
         diag = []
         offdiag = []
-        for i in range(self.SIZE):
-            diag += self.board[i*self.SIZE+i]
-            offdiag += self.board[((i+1)*self.SIZE)-1-i]
-            if diag == [c]*self.SIZE or offdiag == [c]*self.SIZE:
+        for i in range(self.size):
+            diag += self.board[i*self.size+i]
+            offdiag += self.board[((i+1)*self.size)-1-i]
+            if diag == [c]*self.size or offdiag == [c]*self.size:
                 return True
         return False
-    
+
     def has_won_player(self, c):
         """Determine if the player playing char c has won."""
         return self.row_win(c) or self.col_win(c) or self.diag_win(c)
-    
+
     def has_won(self, playernum):
         """Determine if the player denoted by playernum has won."""
         if playernum == 1:

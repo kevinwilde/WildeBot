@@ -134,7 +134,7 @@ class BayesClassifier(object):
         self.save(pos, self.pos_data_filename)
 
 
-    def classify(self, text, ):
+    def classify(self, text):
         """Given a target string text, this function returns the most likely
         document class to which the target string belongs (i.e., positive,
         negative or neutral).
