@@ -107,7 +107,7 @@ class Bot(object):
             try:
                 m = games.Mancala.MancalaBoard.load_game(sender + self.mancala_extension)
             except IOError:
-                err_msg = "No active TicTacToe game. Start a new game to play."
+                err_msg = "No active Mancala game. Start a new game to play."
                 fb.send_api.send_text_message(self.token, sender, err_msg)
             else:
                 move = int(tokens[1])
