@@ -213,11 +213,11 @@ class CustomPlayer(Player):
         """Evaluate the Mancala board for this player."""
         # Reward player for winning the game (more than 24 pebbles in score cup)
         player_wins = 0
-        if board.scoreCups[self.num-1] > 24:
+        if board.score_cups[self.num-1] > 24:
             player_wins = 1000
 
         # Reward player for capturing points and limiting opponent's points
-        mancala_diff = board.scoreCups[self.num-1] - board.scoreCups[self.opp-1]
+        mancala_diff = board.score_cups[self.num-1] - board.score_cups[self.opp-1]
         # Reward player for cups that can reach mancala cup exactly
         exact_mancala_cups = 0
         # Punish player for opponent's cups that can reach their mancala exactly
@@ -235,7 +235,7 @@ class CustomPlayer(Player):
         my_cups = board.get_players_cups(self.num)
         opp_cups = board.get_players_cups(self.opp)
 
-        for i in range(board.NCUPS):
+        for i in range(board.num_cups):
             # total number of pebbles on our side
             our_total_pebbles += my_cups[i]
             # total number of pebbles on opponent's side
@@ -245,13 +245,13 @@ class CustomPlayer(Player):
             if my_cups[i] == 0:
                 if i in index_where_stones_can_land:
                     # number of opponent's pebbles that can be captured
-                    can_be_captured += opp_cups[board.NCUPS-i-1]
-            elif my_cups[i] == board.NCUPS - i:
+                    can_be_captured += opp_cups[board.num_cups-i-1]
+            elif my_cups[i] == board.num_cups - i:
                 exact_mancala_cups += 1
             if opp_cups[i] == 0:
                 if i in opp_index_where_stones_can_land:
                     # number of our pebbles that can be captured by our opponent
-                    opp_can_be_captured += my_cups[board.NCUPS-i-1]
+                    opp_can_be_captured += my_cups[board.num_cups-i-1]
             elif opp_cups[i] == 6-i:
                 opp_exact_mancala_cups += 1
 
