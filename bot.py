@@ -59,6 +59,10 @@ class Bot(object):
         else:
             try:
                 t = games.TicTacToe.TTTBoard.load_game(sender + self.ttt_extension)
+            except IOError:
+                err_msg = "No active TicTacToe game. Start a new game to play."
+                fb.send_api.send_text_message(self.token, sender, err_msg)
+            else:
                 move = int(tokens[1])
                 if t.game_over():
                     fb.send_api.send_text_message(self.token, sender, "Game over\nStart new game with TTT new")
@@ -78,6 +82,7 @@ class Bot(object):
                     else:
                         player2 = games.Player.Player(2, games.Player.Player.ABPRUNE, ply=9)
                         ab_move = player2.choose_move(t)
+                        fb.send_api.send_text_message(self.token, sender, "I choose" + str(ab_move))
                         t.make_move(2, ab_move)
                         fb.send_api.send_text_message(self.token, sender, str(t))
 
@@ -91,11 +96,6 @@ class Bot(object):
                 else:
                     fb.send_api.send_text_message(self.token, sender, "Illegal move")
 
-            except Exception as e:
-                print e
-                err_msg = "Something went wrong...\nMake sure you are choosing a valid square"
-                fb.send_api.send_text_message(self.token, sender, err_msg)
-
 
     def host_mancala_game(self, sender, tokens):
         """Mancala game hosted on server"""
@@ -106,12 +106,15 @@ class Bot(object):
         else:
             try:
                 m = games.Mancala.MancalaBoard.load_game(sender + self.mancala_extension)
+            except IOError:
+                err_msg = "No active TicTacToe game. Start a new game to play."
+                fb.send_api.send_text_message(self.token, sender, err_msg)
+            else:
                 move = int(tokens[1])
                 if m.game_over():
                     fb.send_api.send_text_message(self.token, sender, "Game over\nStart new game with Mancala new")
                 elif m.turn != 1:
                     fb.send_api.send_text_message(self.token, sender, "Not your turn yet")
-
                 else:
                     if m.legal_move(1, move):
                         m.make_move(1, move)
@@ -139,11 +142,6 @@ class Bot(object):
                         fb.send_api.send_text_message(self.token, sender, "Cat's game")
 
                 m.save_game(sender + self.mancala_extension)
-
-            except Exception as e:
-                print e
-                err_msg = "Something went wrong...\nMake sure you are choosing a valid square"
-                fb.send_api.send_text_message(self.token, sender, err_msg)
 
 
 
