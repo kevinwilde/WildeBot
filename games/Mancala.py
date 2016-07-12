@@ -29,7 +29,7 @@ class MancalaBoard(Game):
                     + str(self.P1Cups[self.num_cups-1-i]) + ") " + str(self.num_cups-i) + "\n")
 
         # Player 2 mancala
-        ret += "Me " + str(self.score_cups[1]) + " " + "="*offset[1] + "\n"        
+        ret += "Me " + str(self.score_cups[1]) + " " + "="*offset[1] + "\n"
 
         return ret
 

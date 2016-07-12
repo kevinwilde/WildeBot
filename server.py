@@ -54,7 +54,7 @@ def messaging_events(payload):
 
 def initialize(access_token, greeting_text=True, persistent_menu=True,
                get_started_btn=True):
-    """Initialize bot according to arguments passed"""
+    """Initialize bot according to arguments passed."""
     fb.thread_settings.delete_persistent_menu(access_token)
     fb.thread_settings.delete_get_started_btn(access_token)
     if greeting_text:

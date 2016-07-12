@@ -31,16 +31,19 @@ def set_sender_action(access_token, recipient, sender_action):
     send_message(access_token, data)
 
 def mark_seen(access_token, recipient):
+    """Mark message sent by recipient as seen."""
     set_sender_action(access_token, recipient, "mark_seen")
 
 def typing_on(access_token, recipient):
+    """Turn on typing indicator bubbles in thread with recipient."""
     set_sender_action(access_token, recipient, "typing_on")
 
 def typing_off(access_token, recipient):
+    """Turn off typing indicator bubbles in thread with recipient."""
     set_sender_action(access_token, recipient, "typing_off")
 
 def send_text_message(access_token, recipient, text):
-    """Send the message text to recipient with id recipient."""
+    """Send message text to recipient."""
     data = json.dumps({
         "recipient": {
             "id": recipient
@@ -52,6 +55,7 @@ def send_text_message(access_token, recipient, text):
     send_message(access_token, data)
 
 def send_attachment(access_token, recipient, attachment_type, attachment_url):
+    """Send message with attachment to recipient."""
     data = json.dumps({
         "recipient": {
             "id": recipient
@@ -67,7 +71,24 @@ def send_attachment(access_token, recipient, attachment_type, attachment_url):
     })
     send_message(access_token, data)
 
+def send_image(access_token, recipient, image_url):
+    """Send image to recipient."""
+    send_attachment(access_token, recipient, "image", image_url)
+
+def send_audio(access_token, recipient, audio_url):
+    """Send audio to recipient."""
+    send_attachment(access_token, recipient, "audio", audio_url)
+
+def send_video(access_token, recipient, video_url):
+    """Send video to recipient."""
+    send_attachment(access_token, recipient, "video", video_url)
+
+def send_file(access_token, recipient, file_url):
+    """Send file to recipient."""
+    send_attachment(access_token, recipient, "file", file_url)
+
 def send_generic_template(access_token, recipient, elements):
+    """Send message with generic template to recipient."""
     data = json.dumps({
         "recipient": {
             "id": recipient
@@ -85,6 +106,7 @@ def send_generic_template(access_token, recipient, elements):
     send_message(access_token, data)
 
 def send_button(access_token, recipient, text, buttons):
+    """Send message with button(s) to recipient."""
     data = json.dumps({
         "recipient": {
             "id": recipient
@@ -103,6 +125,7 @@ def send_button(access_token, recipient, text, buttons):
     send_message(access_token, data)
 
 def send_quick_replies(access_token, recipient, text, quick_replies):
+    """Send quick replies to recipient."""
     data = json.dumps({
         "recipient": {
             "id": recipient
