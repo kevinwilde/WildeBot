@@ -33,10 +33,9 @@ class MancalaBoard(Game):
 
         return ret
 
-    def legal_move(self, playernum, cup):
+    def legal_move(self, playernum, move):
         """Return whether or not a given move is legal."""
-        cups = self.get_players_cups(playernum)
-        return cup > 0 and cup <= len(cups) and cups[cup-1] > 0
+        return move in self.legal_moves(playernum)
 
     def legal_moves(self, playernum):
         """Return a list of legal moves for the given player."""
@@ -44,9 +43,8 @@ class MancalaBoard(Game):
         moves = []
         for move in range(len(cups)):
             if cups[move] != 0:
-                moves += [move+1]
+                moves.append(move+1)
         return moves
-
 
     def make_move(self, playernum, cup):
         """ Make a move for the given player.

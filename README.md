@@ -8,3 +8,4 @@
 * Handle each message in own thread? How would this affect if user sent a second move while bot was still thinking
 * ~~Figure out how to put bayes in subdirectory/~~
 * Change Mancala and TTT to quick replies
+* 15 second limit? Fix with message_deliveries?
