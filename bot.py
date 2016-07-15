@@ -82,7 +82,7 @@ class Bot(object):
                     else:
                         player2 = games.Player.Player(2, games.Player.Player.ABPRUNE, ply=9)
                         ab_move = player2.choose_move(t)
-                        fb.send_api.send_text_message(self.token, sender, "I choose" + str(ab_move))
+                        fb.send_api.send_text_message(self.token, sender, "I choose " + str(ab_move))
                         t.make_move(2, ab_move)
                         fb.send_api.send_text_message(self.token, sender, str(t))
 

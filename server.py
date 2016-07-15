@@ -41,13 +41,20 @@ def messaging_events(payload):
     data = json.loads(payload)
     message_events = data["entry"][0]["messaging"]
     for event in message_events:
-        # Messages
-        if "message" in event and "text" in event["message"]:
-            yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
+        # Quick Replies
+        if "message" in event and "quick_reply" in event["message"]:
+            yield (event["sender"]["id"],
+                   event["message"]["quick_reply"]["payload"].encode('unicode_escape'))
 
         # Postbacks
         elif "postback" in event and "payload" in event["postback"]:
-            yield event["sender"]["id"], event["postback"]["payload"].encode('unicode_escape')
+            yield (event["sender"]["id"],
+                   event["postback"]["payload"].encode('unicode_escape'))
+
+        # Messages
+        elif "message" in event and "text" in event["message"]:
+            yield (event["sender"]["id"],
+                   event["message"]["text"].encode('unicode_escape'))
 
         else:
             yield event["sender"]["id"], "I can't echo this"
