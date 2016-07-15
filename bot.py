@@ -91,6 +91,9 @@ class Bot(object):
                                 fb.send_api.send_text_message(self.token, sender, "I win!")
                             else:
                                 fb.send_api.send_text_message(self.token, sender, "Cat's game")
+                        else:
+                            quick_replies = create_quick_replies("TTT", t.legal_moves(1))
+                            fb.send_api.send_quick_replies(self.token, sender, "Your turn", quick_replies)
 
                     t.save_game(sender + self.ttt_extension)
                 else:
@@ -131,15 +134,16 @@ class Bot(object):
                     m.make_move(2, ab_move)
                     fb.send_api.send_text_message(self.token, sender, str(m))
 
-                if m.turn == 1:
-                    fb.send_api.send_text_message(self.token, sender, "Your turn again")
-                elif m.game_over():
+                if m.game_over():
                     if m.has_won(1):
                         fb.send_api.send_text_message(self.token, sender, "You win!")
                     elif m.has_won(2):
                         fb.send_api.send_text_message(self.token, sender, "I win!")
                     else:
                         fb.send_api.send_text_message(self.token, sender, "Cat's game")
+                elif m.turn == 1:
+                    quick_replies = create_quick_replies("Mancala", m.legal_moves(1))
+                    fb.send_api.send_quick_replies(self.token, sender, "Your turn", quick_replies)
 
                 m.save_game(sender + self.mancala_extension)
 
@@ -194,3 +198,15 @@ def react(score):
         return reactions[10]
     else:
         return reactions[11]
+
+def create_quick_replies(game, legal_moves):
+    """Create quick replies for user to make next move."""
+    quick_replies = []
+    for move in legal_moves:
+        quick_reply = {
+            "content_type": "text",
+            "title": move,
+            "payload": game + " " + str(move)
+        }
+        quick_replies.append(quick_reply)
+    return quick_replies
