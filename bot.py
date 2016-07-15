@@ -54,7 +54,9 @@ class Bot(object):
         """Tic Tac Toe game hosted on server"""
         if tokens[1].lower() == "new":
             t = games.TicTacToe.TTTBoard()
-            fb.send_api.send_text_message(self.token, sender, str(t) + "\nYou go first")
+            quick_replies = create_quick_replies("TTT", t.legal_moves(1))
+            fb.send_api.send_text_message(self.token, sender, str(t))
+            fb.send_api.send_quick_replies(self.token, sender, "Your turn", quick_replies)
             t.save_game(sender + self.ttt_extension)
         else:
             try:
@@ -104,7 +106,9 @@ class Bot(object):
         """Mancala game hosted on server"""
         if tokens[1].lower() == "new":
             m = games.Mancala.MancalaBoard()
-            fb.send_api.send_text_message(self.token, sender, str(m) + "\nYou go first")
+            quick_replies = create_quick_replies("Mancala", m.legal_moves(1))
+            fb.send_api.send_text_message(self.token, sender, str(m))
+            fb.send_api.send_quick_replies(self.token, sender, "Your turn", quick_replies)
             m.save_game(sender + self.mancala_extension)
         else:
             try:
