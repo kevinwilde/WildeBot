@@ -92,4 +92,4 @@ def initialize(access_token, greeting_text=True, persistent_menu=True,
 initialize(PAGE_ACCESS_TOKEN)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
