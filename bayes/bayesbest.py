@@ -91,12 +91,12 @@ class BayesClassifier(object):
                 for i in range(len(word_list)):
                     # Unigram
                     unigram = self.stem(word_list[i])
-                    neg.feature_dict[unigram] = 1 + neg.feature_dict.get(unigram, default=0)
+                    neg.feature_dict[unigram] = 1 + neg.feature_dict.get(unigram, 0)
 
                     # Bigram
                     if i+1 < len(word_list):
                         bigram = self.stem(word_list[i]) + ' ' + self.stem(word_list[i+1])
-                        neg.feature_dict[bigram] = 1 + neg.feature_dict.get(bigram, default=0)
+                        neg.feature_dict[bigram] = 1 + neg.feature_dict.get(bigram, 0)
 
             # Positive
             elif true_class == 1:
@@ -104,12 +104,12 @@ class BayesClassifier(object):
                 for i in range(len(word_list)):
                     # Unigram
                     unigram = self.stem(word_list[i])
-                    pos.feature_dict[unigram] = 1 + pos.feature_dict.get(unigram, default=0)
+                    pos.feature_dict[unigram] = 1 + pos.feature_dict.get(unigram, 0)
 
                     # Bigram
                     if i+1 < len(word_list):
                         bigram = self.stem(word_list[i]) + ' ' + self.stem(word_list[i+1])
-                        pos.feature_dict[bigram] = 1 + pos.feature_dict.get(bigram, default=0)
+                        pos.feature_dict[bigram] = 1 + pos.feature_dict.get(bigram, 0)
 
         neg.sum_of_all_features = sum([neg.feature_dict[f] for f in neg.feature_dict])
         pos.sum_of_all_features = sum([pos.feature_dict[f] for f in pos.feature_dict])
@@ -152,12 +152,12 @@ class BayesClassifier(object):
                      self.pos_data.feature_dict[unigram] > min_feature_frequency)):
 
                 # Negative
-                uni_freq_neg = 1 + self.neg_data.feature_dict.get(unigram, default=0)
+                uni_freq_neg = 1 + self.neg_data.feature_dict.get(unigram, 0)
                 uni_cond_prob_neg = float(uni_freq_neg) / self.neg_data.sum_of_all_features
                 cond_prob_neg += math.log(uni_cond_prob_neg, 2)
 
                 # Positive
-                uni_freq_pos = 1 + self.pos_data.feature_dict.get(unigram, default=0)
+                uni_freq_pos = 1 + self.pos_data.feature_dict.get(unigram, 0)
                 uni_cond_prob_pos = float(uni_freq_pos) / self.pos_data.sum_of_all_features
                 cond_prob_pos += math.log(uni_cond_prob_pos, 2)
 
@@ -171,12 +171,12 @@ class BayesClassifier(object):
                          self.pos_data.feature_dict[bigram] > min_feature_frequency)):
 
                     # Negative
-                    bi_freq_neg = 1 + self.neg_data.feature_dict.get(bigram, default=0)
+                    bi_freq_neg = 1 + self.neg_data.feature_dict.get(bigram, 0)
                     bi_cond_prob_neg = float(bi_freq_neg) / self.neg_data.sum_of_all_features
                     cond_prob_neg += math.log(bi_cond_prob_neg, 2)
 
                     # Positive
-                    bi_freq_pos = 1 + self.pos_data.feature_dict.get(bigram, default=0)
+                    bi_freq_pos = 1 + self.pos_data.feature_dict.get(bigram, 0)
                     bi_cond_prob_pos = float(bi_freq_pos) / self.pos_data.sum_of_all_features
                     cond_prob_pos += math.log(bi_cond_prob_pos, 2)
 
