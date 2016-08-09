@@ -46,7 +46,7 @@ def messaging_events(payload):
 
         # Postbacks
         elif "postback" in event and "payload" in event["postback"]:
-            yield (event["message"]["mid"], event["sender"]["id"],
+            yield (event["sender"]["id"] + event["timestamp"], event["sender"]["id"],
                    event["postback"]["payload"].encode('unicode_escape'))
 
         # Messages

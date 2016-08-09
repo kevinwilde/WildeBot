@@ -20,8 +20,8 @@ class Bot(object):
     def act_on_message(self, mid, sender, message):
         """Determine how to respond to message"""
         fb.send_api.mark_seen(self.token, sender)
+        print "HEre", self.mids
         if mid in self.mids:
-            print "Return early"
             return "ok"
         else:
             self.mids.append(mid)
