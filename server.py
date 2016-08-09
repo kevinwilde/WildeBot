@@ -17,21 +17,19 @@ MESSENGER_BOT = bot.Bot(PAGE_ACCESS_TOKEN)
 @app.route('/', methods=['GET'])
 def handle_verification():
     """Handle verification."""
-    print "Handling Verification"
     if request.args.get('hub.verify_token', '') == PASSWORD:
-        print "Verification successful"
         return request.args.get('hub.challenge', '')
     else:
-        print "Verification failed"
         return 'Error: Verification failed'
 
 @app.route('/', methods=['POST'])
 def handle_messages():
     """Handle messages."""
     payload = request.get_data()
-    for sender, message in messaging_events(payload):
+    for (mid, sender, message) in messaging_events(payload):
         print "Incoming from %s: %s" % (sender, message)
-        MESSENGER_BOT.act_on_message(sender, message)
+        print mid
+        MESSENGER_BOT.act_on_message(mid, sender, message)
     return "ok"
 
 def messaging_events(payload):
@@ -43,17 +41,17 @@ def messaging_events(payload):
     for event in message_events:
         # Quick Replies
         if "message" in event and "quick_reply" in event["message"]:
-            yield (event["sender"]["id"],
+            yield (event["message"]["mid"], event["sender"]["id"],
                    event["message"]["quick_reply"]["payload"].encode('unicode_escape'))
 
         # Postbacks
         elif "postback" in event and "payload" in event["postback"]:
-            yield (event["sender"]["id"],
+            yield (event["message"]["mid"], event["sender"]["id"],
                    event["postback"]["payload"].encode('unicode_escape'))
 
         # Messages
         elif "message" in event and "text" in event["message"]:
-            yield (event["sender"]["id"],
+            yield (event["message"]["mid"], event["sender"]["id"],
                    event["message"]["text"].encode('unicode_escape'))
 
         else:
