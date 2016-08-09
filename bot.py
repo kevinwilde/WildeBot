@@ -21,7 +21,8 @@ class Bot(object):
         """Determine how to respond to message"""
         fb.send_api.mark_seen(self.token, sender)
         if mid in self.mids:
-            return
+            print "Return early"
+            return "ok"
         else:
             self.mids.append(mid)
         # fb.send_api.typing_on(self.token, sender)
