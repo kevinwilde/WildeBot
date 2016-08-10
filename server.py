@@ -39,23 +39,43 @@ def messaging_events(payload):
     data = json.loads(payload)
     message_events = data["entry"][0]["messaging"]
     for event in message_events:
-        # Quick Replies
-        if "message" in event and "quick_reply" in event["message"]:
-            yield (event["message"]["mid"], event["sender"]["id"],
-                   event["message"]["quick_reply"]["payload"].encode('unicode_escape'))
-
-        # Postbacks
-        elif "postback" in event and "payload" in event["postback"]:
-            yield (event["sender"]["id"] + event["timestamp"], event["sender"]["id"],
-                   event["postback"]["payload"].encode('unicode_escape'))
-
-        # Messages
-        elif "message" in event and "text" in event["message"]:
-            yield (event["message"]["mid"], event["sender"]["id"],
-                   event["message"]["text"].encode('unicode_escape'))
-
+        if is_quick_reply(event):
+            yield decipher_quick_reply(event)
+        elif is_postback(event):
+            yield decipher_postback(event)
+        elif is_text_message(event):
+            yield decipher_text_message(event)
         else:
-            yield event["sender"]["id"], "I can't echo this"
+            yield decipher_unknown(event)
+
+def is_quick_reply(event):
+    return "message" in event and "quick_reply" in event["message"]
+
+def is_postback(event):
+    return "postback" in event and "payload" in event["postback"]
+
+def is_text_message(event):
+    return "message" in event and "text" in event["message"]
+
+def decipher_quick_reply(event):
+    return (event["message"]["mid"],
+            event["sender"]["id"],
+            event["message"]["quick_reply"]["payload"].encode('unicode_escape'))
+
+def decipher_postback(event):
+    return (event["sender"]["id"] + event["timestamp"],
+            event["sender"]["id"],
+            event["postback"]["payload"].encode('unicode_escape'))
+
+def decipher_text_message(event):
+    return (event["message"]["mid"],
+            event["sender"]["id"],
+            event["message"]["text"].encode('unicode_escape'))
+
+def decipher_unknown(event):
+    return (event["sender"]["id"] + event["timestamp"],
+            event["sender"]["id"],
+            "I can't handle this")
 
 def initialize(access_token, greeting_text=True, persistent_menu=True,
                get_started_btn=True):
