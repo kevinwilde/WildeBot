@@ -4,6 +4,7 @@ This module defines a server for a Facebook Messenger bot.
 
 import json
 import os
+import threading
 from flask import Flask, request
 
 import bot
@@ -28,8 +29,9 @@ def handle_messages():
     payload = request.get_data()
     for (mid, sender, message) in messaging_events(payload):
         print "Incoming from %s: %s" % (sender, message)
-        print mid
-        MESSENGER_BOT.act_on_message(mid, sender, message)
+        # print mid
+        thread = threading.Thread(target=MESSENGER_BOT.act_on_message, args=(mid, sender, message))
+        thread.start()
     return "ok"
 
 def messaging_events(payload):

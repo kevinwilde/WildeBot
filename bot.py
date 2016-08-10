@@ -12,7 +12,7 @@ class Bot(object):
     def __init__(self, token):
         """Create instance of Bot class."""
         self.token = token
-        self.mids = []
+        # self.mids = []
         self.bayes_classifier = bayes.BayesClassifier()
         self.ttt_extension = "TTTGame.pickle"
         self.mancala_extension = "MancGame.pickle"
@@ -20,11 +20,11 @@ class Bot(object):
     def act_on_message(self, mid, sender, message):
         """Determine how to respond to message"""
         fb.send_api.mark_seen(self.token, sender)
-        print "HEre", self.mids
-        if mid in self.mids:
-            return "ok"
-        else:
-            self.mids.append(mid)
+        # print "HEre", self.mids
+        # if mid in self.mids:
+        #     return "ok"
+        # else:
+        #     self.mids.append(mid)
         # fb.send_api.typing_on(self.token, sender)
         tokens = self.bayes_classifier.tokenize(message)
 
