@@ -27,9 +27,9 @@ def handle_verification():
 def handle_messages():
     """Handle messages."""
     payload = request.get_data()
-    for (mid, sender, message) in messaging_events(payload):
+    for (sender, message) in messaging_events(payload):
         print "Incoming from %s: %s" % (sender, message)
-        thread = threading.Thread(target=MESSENGER_BOT.act_on_message, args=(mid, sender, message))
+        thread = threading.Thread(target=MESSENGER_BOT.act_on_message, args=(sender, message))
         thread.start()
     return "ok"
 
