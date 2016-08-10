@@ -29,7 +29,6 @@ def handle_messages():
     payload = request.get_data()
     for (mid, sender, message) in messaging_events(payload):
         print "Incoming from %s: %s" % (sender, message)
-        # print mid
         thread = threading.Thread(target=MESSENGER_BOT.act_on_message, args=(mid, sender, message))
         thread.start()
     return "ok"
@@ -60,23 +59,19 @@ def is_text_message(event):
     return "message" in event and "text" in event["message"]
 
 def decipher_quick_reply(event):
-    return (event["message"]["mid"],
-            event["sender"]["id"],
+    return (event["sender"]["id"],
             event["message"]["quick_reply"]["payload"].encode('unicode_escape'))
 
 def decipher_postback(event):
-    return (event["sender"]["id"] + event["timestamp"],
-            event["sender"]["id"],
+    return (event["sender"]["id"],
             event["postback"]["payload"].encode('unicode_escape'))
 
 def decipher_text_message(event):
-    return (event["message"]["mid"],
-            event["sender"]["id"],
+    return (event["sender"]["id"],
             event["message"]["text"].encode('unicode_escape'))
 
 def decipher_unknown(event):
-    return (event["sender"]["id"] + event["timestamp"],
-            event["sender"]["id"],
+    return (event["sender"]["id"],
             "I can't handle this")
 
 def initialize(access_token, greeting_text=True, persistent_menu=True,
