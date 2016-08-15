@@ -4,11 +4,12 @@ This is an artificially intelligent bot for Facebook Messenger. Feel free to
 [message it](https://m.me/kevinwildebot) and like the [Facebook page]
 (https://facebook.com/kevinwildebot)!!
 
-The basic setup was constructed with help from [this tutorial]
-(http://tsaprailis.com/2016/06/02/How-to-build-and-deploy-a-Facebook-Messenger-bot-with-Python-and-Flask-a-tutorial/).
+[This tutorial]
+(http://tsaprailis.com/2016/06/02/How-to-build-and-deploy-a-Facebook-Messenger-bot-with-Python-and-Flask-a-tutorial/)
+helped me get the bot up and running on Heroku.
+
+The bot uses a Naive Bayes classifier to react to messages it receives. It also
+can play Tic-Tac-Toe and Mancala. Think you can beat it?
 
 ### To Do
-* ~~Use Twitter Naive Bayes classifier~~ Makes app too big
-* Move to postgres database instead of pickling files
-* ~~Handle each message in own thread~~
-* ~~15 second limit?~~ Fixed with thread for each message
+* Move to postgres database instead of pickling files?
