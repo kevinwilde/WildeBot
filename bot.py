@@ -56,11 +56,12 @@ class Bot(object):
         fb.send_api.send_text_message(self.token, sender, msg)
         msg = ("I am an artificially intelligent Facebook Messenger bot. You "
                "can play against it in Tic-Tac-Toe or Mancala by using the "
-               "menu in the bottom left corner. You can also talk to me, and "
-               "I will react to what you say based on how nice (or mean) I "
-               "think your message is. I can't really hold a conversation, "
-               "but if you want to chat more feel free to message "
-               "https://m.me/wildekevin")
+               "menu in the bottom left corner.")
+        fb.send_api.send_text_message(self.token, sender, msg)
+        msg = ("You can also talk to me, and I will react to what you say "
+               "based on how nice (or mean) I think your message is. I can't "
+               "really hold a conversation, but if you want to chat more feel "
+               "free to message https://m.me/wildekevin")
         fb.send_api.send_text_message(self.token, sender, msg)
 
     def host_ttt_game(self, sender, tokens):
