@@ -94,6 +94,11 @@ def initialize(access_token, greeting_text=True, persistent_menu=True,
                 "payload": "TTT new"
             },
             {
+                "type": "postback",
+                "title": "Help",
+                "payload": "help"
+            },
+            {
                 "type": "web_url",
                 "title": "View Facebook Page",
                 "url": "https://www.facebook.com/kevinwildebot"

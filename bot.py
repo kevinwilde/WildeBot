@@ -42,12 +42,26 @@ class Bot(object):
         elif len(tokens) > 1 and tokens[0].lower() == "mancala":
             self.host_mancala_game(sender, tokens)
 
+        elif message.lower() == "help":
+            self.send_help_message(sender)
+
         # Bayes
         else:
             diff = self.bayes_classifier.classify(message)
             fb.send_api.send_text_message(self.token, sender, react(diff))
 
-        return "ok"
+    def send_help_message(self, sender):
+        """Send help message explaining WildeBot."""
+        msg = "Hi there!"
+        fb.send_api.send_text_message(self.token, sender, msg)
+        msg = ("I am an artificially intelligent Facebook Messenger bot. You "
+               "can play against it in Tic-Tac-Toe or Mancala by using the "
+               "menu in the bottom left corner. You can also talk to me, and "
+               "I will react to what you say based on how nice (or mean) I "
+               "think your message is. I can't really hold a conversation, "
+               "but if you want to chat more feel free to message "
+               "https://m.me/wildekevin")
+        fb.send_api.send_text_message(self.token, sender, msg)
 
     def host_ttt_game(self, sender, tokens):
         """Tic Tac Toe game hosted on server"""
