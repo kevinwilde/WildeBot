@@ -8,10 +8,6 @@ class MancalaBoard(Game):
 
     def __init__(self):
         """Initialize a game board for the game of mancala."""
-        self.reset()
-
-    def reset(self):
-        """Reset the mancala board for a new game."""
         self.num_cups = 6
         self.score_cups = [0, 0]
         self.P1Cups = [4]*self.num_cups

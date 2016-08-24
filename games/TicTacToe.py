@@ -8,10 +8,6 @@ class TTTBoard(Game):
 
     def __init__(self):
         """Initialize the data members."""
-        self.reset()
-
-    def reset(self):
-        """Reset the board for a new game."""
         self.size = 3
         self.board = [' ']*(self.size*self.size)
         self.turn = 1
