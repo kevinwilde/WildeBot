@@ -1,23 +1,16 @@
-"""
-This module defines a Facebook Messenger WildeBot.
-"""
-
 import bayes
 import fb
 import games
 
 class Bot(object):
-    """Class for WildeBot."""
 
     def __init__(self, token):
-        """Create instance of Bot class."""
         self.token = token
         self.bayes_classifier = bayes.BayesClassifier()
         self.ttt_extension = "TTTGame.pickle"
         self.mancala_extension = "MancGame.pickle"
 
     def act_on_message(self, sender, message):
-        """Determine how to respond to message"""
         fb.send_api.mark_seen(self.token, sender)
         tokens = self.bayes_classifier.tokenize(message)
 
@@ -51,7 +44,6 @@ class Bot(object):
             fb.send_api.send_text_message(self.token, sender, react(diff))
 
     def send_help_message(self, sender):
-        """Send help message explaining WildeBot."""
         msg = "Hi there!"
         fb.send_api.send_text_message(self.token, sender, msg)
         msg = ("I am an artificially intelligent Facebook Messenger bot. You "
@@ -168,7 +160,6 @@ class Bot(object):
 
 
 def is_greeting(word):
-    """Determines if word is a greeting"""
     greetings = ["hi", "hello", "hey"]
     return word.lower() in greetings
 

@@ -15,7 +15,8 @@ class Player(object):
     CUSTOM = 4
 
     def __init__(self, playerNum, playerType, ply=0):
-        """Initialize a Player with a playerNum (1 or 2), playerType
+        """
+        Initialize a Player with a playerNum (1 or 2), playerType
         (one of the constants such as HUMAN), and a ply (default is 0).
         """
         self.num = playerNum
@@ -24,7 +25,6 @@ class Player(object):
         self.ply = ply
 
     def __repr__(self):
-        """Returns a string representation of the Player."""
         return str(self.num)
 
     def minimax_move(self, board, ply):
@@ -55,7 +55,8 @@ class Player(object):
         return best_score, best_move
 
     def max_value(self, board, ply, turn):
-        """Find the minimax value for the next move for this player at
+        """
+        Find the minimax value for the next move for this player at
         a given board configuation. Return score.
         """
         if board.game_over():
@@ -74,7 +75,8 @@ class Player(object):
         return best_score
 
     def min_value(self, board, ply, turn):
-        """Find the minimax value for the next move for this player at
+        """
+        Find the minimax value for the next move for this player at
         a given board configuation. Return score.
         """
         if board.game_over():
@@ -92,10 +94,8 @@ class Player(object):
                 best_score = score
         return best_score
 
-
     # The default player defines a very simple score function
     def score(self, board):
-        """Return the score for this player given the state of the board."""
         if board.has_won(self.num):
             return 100.0
         elif board.has_won(self.opp):
@@ -104,7 +104,8 @@ class Player(object):
             return 50.0
 
     def alphabeta_move(self, board, ply):
-        """Choose a move with alpha beta pruning. Return (score, move).
+        """
+        Choose a move with alpha beta pruning. Return (score, move).
         """
         best_move = -1
         best_score = -float('inf')
@@ -131,7 +132,8 @@ class Player(object):
         return best_score, best_move
 
     def max_value_alphabeta(self, board, ply, turn, alpha, beta):
-        """Find the minimax value for the next move for this player at
+        """
+        Find the minimax value for the next move for this player at
         a given board configuation. Return score.
         """
         if board.game_over():
@@ -153,7 +155,8 @@ class Player(object):
         return best_score
 
     def min_value_alphabeta(self, board, ply, turn, alpha, beta):
-        """Find the minimax value for the next move for this player at
+        """
+        Find the minimax value for the next move for this player at
         a given board configuation. Return score.
         """
         if board.game_over():
@@ -175,7 +178,7 @@ class Player(object):
         return best_score
 
     def choose_move(self, board):
-        """ Returns the next move that this player wants to make """
+        """Returns the next move that this player wants to make."""
         if self.type == self.HUMAN:
             move = int(raw_input("Please enter your move:"))
             while not board.legal_move(self.num, move):
@@ -205,7 +208,8 @@ class Player(object):
 
 
 class CustomPlayer(Player):
-    """Defines a player that knows how to evaluate a Mancala gameboard
+    """
+    Defines a player that knows how to evaluate a Mancala gameboard
     intelligently
     """
 

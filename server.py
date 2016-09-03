@@ -1,7 +1,3 @@
-"""
-This module defines a server for a Facebook Messenger bot.
-"""
-
 import json
 import os
 import threading
@@ -17,7 +13,6 @@ MESSENGER_BOT = bot.Bot(PAGE_ACCESS_TOKEN)
 
 @app.route('/', methods=['GET'])
 def handle_verification():
-    """Handle verification."""
     if request.args.get('hub.verify_token', '') == PASSWORD:
         return request.args.get('hub.challenge', '')
     else:
@@ -25,7 +20,6 @@ def handle_verification():
 
 @app.route('/', methods=['POST'])
 def handle_messages():
-    """Handle messages."""
     payload = request.get_data()
     for (sender, message) in messaging_events(payload):
         print "Incoming from %s: %s" % (sender, message)
@@ -34,8 +28,8 @@ def handle_messages():
     return "ok"
 
 def messaging_events(payload):
-    """Generate tuples of (sender_id, message_text) from the provided
-    payload.
+    """
+    Generate tuples of (sender_id, message_text) from the provided payload.
     """
     data = json.loads(payload)
     message_events = data["entry"][0]["messaging"]

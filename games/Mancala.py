@@ -7,7 +7,6 @@ from .Game import Game
 class MancalaBoard(Game):
 
     def __init__(self):
-        """Initialize a game board for the game of mancala."""
         self.num_cups = 6
         self.score_cups = [0, 0]
         self.P1Cups = [4]*self.num_cups
@@ -43,7 +42,9 @@ class MancalaBoard(Game):
         return moves
 
     def make_move(self, playernum, cup):
-        """ Make a move for the given player.
+        """
+        Make a move for the given player.
+        
         Return True if the player gets another turn and False if not.
         Assumes a legal move.
         """
@@ -66,7 +67,6 @@ class MancalaBoard(Game):
             return again
 
     def make_move_help(self, playernum, cup):
-        """Helper for make_move."""
         if playernum == 1:
             cups = self.P1Cups
             opp_cups = self.P2Cups
@@ -115,7 +115,6 @@ class MancalaBoard(Game):
         return False
 
     def has_won(self, playernum):
-        """Determine if given player has won."""
         if self.game_over():
             opp = 2 - playernum + 1
             return self.score_cups[playernum-1] > self.score_cups[opp-1]
@@ -123,7 +122,6 @@ class MancalaBoard(Game):
             return False
 
     def get_players_cups(self, playernum):
-        """Return the cups for the given player."""
         if playernum == 1:
             return self.P1Cups
         elif playernum == 2:
@@ -132,7 +130,6 @@ class MancalaBoard(Game):
             raise ValueError("playernum must be 1 or 2")
 
     def game_over(self):
-        """Determine if game is over."""
         p1done = self.P1Cups == [0] * self.num_cups
         p2done = self.P2Cups == [0] * self.num_cups
         return p1done or p2done

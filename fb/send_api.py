@@ -21,7 +21,6 @@ def send_message(access_token, data):
         print r.text
 
 def set_sender_action(access_token, recipient, sender_action):
-    """Set sender action."""
     data = json.dumps({
         "recipient": {
             "id": recipient

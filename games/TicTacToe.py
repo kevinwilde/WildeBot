@@ -7,13 +7,13 @@ from .Game import Game
 class TTTBoard(Game):
 
     def __init__(self):
-        """Initialize the data members."""
         self.size = 3
         self.board = [' ']*(self.size*self.size)
         self.turn = 1
 
     def __str__(self):
-        """Return a string representation of the board where each
+        """
+        Return a string representation of the board where each
         empty square is indicated with the number of its move.
         """
         ret = "\n"
@@ -33,14 +33,9 @@ class TTTBoard(Game):
         return ret
 
     def legal_move(self, playernum, move):
-        """Return true or false, whether the move is legal for the
-        player.
-        """
         return move in self.legal_moves(playernum)
 
     def legal_moves(self, playernum):
-        """Return the legal moves remaining for the player in question.
-        """
         moves = []
         for move in range(len(self.board)):
             if self.board[move] == ' ':
@@ -48,12 +43,12 @@ class TTTBoard(Game):
         return moves
 
     def make_move(self, playernum, pos):
-        """Make a move for player in pos."""
         move = pos - 1
 
         if (move not in range(len(self.board))
-                or self.board[move] != ' '
-                or self.turn != playernum):
+            or self.board[move] != ' '
+            or self.turn != playernum):
+            
             return False
 
         if playernum == 1:
@@ -95,11 +90,9 @@ class TTTBoard(Game):
         return False
 
     def has_won_player(self, c):
-        """Determine if the player playing char c has won."""
         return self.row_win(c) or self.col_win(c) or self.diag_win(c)
 
     def has_won(self, playernum):
-        """Determine if the player denoted by playernum has won."""
         if playernum == 1:
             return self.has_won_player('X')
         elif playernum == 2:
@@ -108,13 +101,11 @@ class TTTBoard(Game):
             raise ValueError("playernum must be 1 or 2")
 
     def board_full(self):
-        """Determine if board is full."""
         for square in self.board:
             if square == ' ':
                 return False
         return True
 
     def game_over(self):
-        """Determine if game is over."""
         return (self.has_won_player('X') or self.has_won_player('0')
                 or self.board_full())
