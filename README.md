@@ -1,5 +1,7 @@
 # WildeBot
 
+[![Build Status](https://travis-ci.org/kevinwilde/WildeBot.svg?branch=master)](https://travis-ci.org/kevinwilde/WildeBot)
+
 This is an artificially intelligent bot for Facebook Messenger. Feel free to
 [message it](https://m.me/kevinwildebot) and like the [Facebook page]
 (https://facebook.com/kevinwildebot)!!
