@@ -2,42 +2,37 @@ import bayes
 import fb
 import games
 
+TTT_EXTENSION = "TTTGame.pickle"
+MANCALA_EXTENSION = "MancGame.pickle"
+
 class Bot(object):
 
     def __init__(self, token):
         self.token = token
         self.bayes_classifier = bayes.BayesClassifier()
-        self.ttt_extension = "TTTGame.pickle"
-        self.mancala_extension = "MancGame.pickle"
 
     def act_on_message(self, sender, message):
         fb.send_api.mark_seen(self.token, sender)
         tokens = self.bayes_classifier.tokenize(message)
-
         # Greeting
         if len(tokens) > 0 and is_greeting(tokens[0]):
             fb.send_api.send_text_message(self.token, sender, "Hello")
-
         # Repeat
         elif len(tokens) > 0 and tokens[0].lower() == "repeat":
             fb.send_api.send_text_message(self.token, sender, message[len("repeat")+1:])
-
         # Reverse
         elif len(tokens) > 0 and tokens[0].lower() == "reverse":
             reverse_message = message[::-1]
             fb.send_api.send_text_message(self.token, sender, reverse_message)
-
         # Tic Tac Toe
         elif len(tokens) > 1 and tokens[0].lower() == "ttt":
             self.host_ttt_game(sender, tokens)
-
         # Mancala
         elif len(tokens) > 1 and tokens[0].lower() == "mancala":
             self.host_mancala_game(sender, tokens)
-
+        # Help
         elif message.lower() == "help":
             self.send_help_message(sender)
-
         # Bayes
         else:
             diff = self.bayes_classifier.classify(message)
@@ -63,10 +58,10 @@ class Bot(object):
             quick_replies = create_quick_replies("TTT", t.legal_moves(1))
             fb.send_api.send_text_message(self.token, sender, str(t))
             fb.send_api.send_quick_replies(self.token, sender, "Your turn", quick_replies)
-            t.save_game(sender + self.ttt_extension)
+            t.save_game(sender + TTT_EXTENSION)
         else:
             try:
-                t = games.TicTacToe.TTTBoard.load_game(sender + self.ttt_extension)
+                t = games.TicTacToe.TTTBoard.load_game(sender + TTT_EXTENSION)
             except IOError:
                 err_msg = "No active TicTacToe game. Start a new game to play."
                 fb.send_api.send_text_message(self.token, sender, err_msg)
@@ -103,7 +98,7 @@ class Bot(object):
                             quick_replies = create_quick_replies("TTT", t.legal_moves(1))
                             fb.send_api.send_quick_replies(self.token, sender, "Your turn", quick_replies)
 
-                    t.save_game(sender + self.ttt_extension)
+                    t.save_game(sender + TTT_EXTENSION)
                 else:
                     fb.send_api.send_text_message(self.token, sender, "Illegal move")
 
@@ -115,10 +110,10 @@ class Bot(object):
             quick_replies = create_quick_replies("Mancala", m.legal_moves(1))
             fb.send_api.send_text_message(self.token, sender, str(m))
             fb.send_api.send_quick_replies(self.token, sender, "Your turn", quick_replies)
-            m.save_game(sender + self.mancala_extension)
+            m.save_game(sender + MANCALA_EXTENSION)
         else:
             try:
-                m = games.Mancala.MancalaBoard.load_game(sender + self.mancala_extension)
+                m = games.Mancala.MancalaBoard.load_game(sender + MANCALA_EXTENSION)
             except IOError:
                 err_msg = "No active Mancala game. Start a new game to play."
                 fb.send_api.send_text_message(self.token, sender, err_msg)
@@ -155,7 +150,7 @@ class Bot(object):
                     quick_replies = create_quick_replies("Mancala", m.legal_moves(1))
                     fb.send_api.send_quick_replies(self.token, sender, "Your turn", quick_replies)
 
-                m.save_game(sender + self.mancala_extension)
+                m.save_game(sender + MANCALA_EXTENSION)
 
 
 
@@ -181,7 +176,7 @@ def react(score):
         "Thanks", #8
         "You are the best :)", #9
         "You just made my day! Thank you!", #10
-        "What an amazing thing to hear! The world sure could use more people like you", #11
+        "What an amazing thing to hear! The world sure could use more people like you" #11
         ]
     if score < -12:
         return reactions[0]
