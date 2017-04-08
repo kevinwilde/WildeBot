@@ -17,6 +17,9 @@ class Bot(object):
         # Greeting
         if len(tokens) > 0 and is_greeting(tokens[0]):
             fb.send_api.send_text_message(self.token, sender, "Hello")
+        # Help
+        elif message.lower() == "help" or message.lower() == "get started":
+            self.send_help_message(sender)
         # Repeat
         elif len(tokens) > 0 and tokens[0].lower() == "repeat":
             fb.send_api.send_text_message(self.token, sender, message[len("repeat")+1:])
@@ -30,9 +33,6 @@ class Bot(object):
         # Mancala
         elif len(tokens) > 1 and tokens[0].lower() == "mancala":
             self.host_mancala_game(sender, tokens)
-        # Help
-        elif message.lower() == "help":
-            self.send_help_message(sender)
         # Bayes
         else:
             diff = self.bayes_classifier.classify(message)
